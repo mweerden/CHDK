@@ -500,4 +500,41 @@ void drv_self_unhide(void);
 #define started() debug_led(1)
 #define finished() debug_led(0)
 
+
+
+typedef struct {
+    int code;
+    int sess_id;
+    int trans_id;
+    int num_param;
+    int param1;
+    int param2;
+    int param3;
+    int param4;
+    int param5;
+} PTPContainer;
+
+typedef struct {
+    int handle;
+    int (*send_data)(int handle, char *buf, int size, int size_again, int, int, int); // (0xFF9F525C)
+    int (*recv_data)(int handle, char *buf, int size, int, int); // (0xFF9F5500)
+    int (*send_resp)(int handle, PTPContainer *resp); // (0xFF9F5688)
+    int (*get_data_size)(int handle); // (0xFF9F5830)
+    int (*send_err_resp)(int handle, PTPContainer *resp); // (0xFF9F5784)
+    int unknown1; // ???
+    int (*f2)(); // ??? (0xFF8D5B24)
+    int (*f3)(); // ??? (0xFF8D5B5C)
+    // more??
+} ptp_data;
+
+typedef int (*ptp_handler)(int, ptp_data*, int, int, int, int, int, int, int, int);
+
+int add_ptp_handler(int opcode, ptp_handler handler, int unknown);
+
+void shutdown_soft();
+void reboot(char *fw_update); // fw_update == NULL implies normal reboot
+void switch_mode(int mode); // 0 = playback, 1 = record; only call while USB connected
+
+void ExitTask();
+
 #endif

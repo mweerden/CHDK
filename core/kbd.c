@@ -250,6 +250,15 @@ static int lua_script_start( char const* script )
   return 1;
 }
 
+void lua_script_exec( char *script )
+{
+  lua_script_start(script);
+  state_lua_kbd_first_call_to_resume = 1;
+  state_kbd_script_run = 1;
+  kbd_blocked = 1;
+}
+
+
 static void wait_and_end(void)
 {
 	script_console_add_line("PRESS SHUTTER TO CLOSE");

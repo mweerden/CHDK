@@ -34,6 +34,9 @@ void CreateTask_spytask() {
         _CreateTask("SpyTask", 0x19, 0x2000, core_spytask, 0);
 };
 
+void CreateTask_init_chdk_ptp() {
+        _CreateTask("InitCHDKPTP", 0x19, 0x2000, init_chdk_ptp, 0);
+};
 
 void __attribute__((naked,noinline)) boot() {
 
@@ -294,6 +297,7 @@ void __attribute__((naked,noinline)) task_Startup_my() {
                  "BL      sub_FF826C64\n"
                  "BL      sub_FF829898\n"
                  "BL      CreateTask_spytask\n"    // +
+                 "BL      CreateTask_init_chdk_ptp\n"    // +
                  "BL      sub_FF821848\n"  // calls mykbd_task and JogDial_task
                                            //   - SleepTask
                                            //   - JogDialTask

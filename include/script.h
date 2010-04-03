@@ -24,4 +24,6 @@ extern void script_print_screen_statement(int val);
 extern int load_params_values(const char *fn, int update_vars, int read_param_set);
 extern void save_params_values(int unconditional);
 //-------------------------------------------------------------------
+
+extern void lua_script_exec(char *script);
 #endif

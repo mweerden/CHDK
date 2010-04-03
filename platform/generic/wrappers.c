@@ -947,3 +947,13 @@ void __attribute__((weak)) vid_turn_off_updates()
 void __attribute__((weak)) vid_turn_on_updates()
 {
 }
+
+int add_ptp_handler(int opcode, ptp_handler handler, int unknown)
+{
+  return _add_ptp_handler(opcode,handler,unknown);
+}
+
+void ExitTask()
+{
+  _ExitTask();
+}

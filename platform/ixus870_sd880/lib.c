@@ -94,3 +94,36 @@ void vid_turn_on_updates()
 {
   _RefreshPhysicalScreen(1);
 }
+
+void shutdown_soft()
+{
+   _PostLogicalEventForNotPowerType(0x1005,0);
+}
+
+void reboot(char *fw_update)
+{
+  if ( fw_update == 0 )
+  {
+    // sequence taken from reboot_fw_update
+    ((void (*)()) 0xFF94F7B8)();
+    ((void (*)()) 0xFF842480)();
+    ((void (*)()) 0xFF841594)();
+    ((void (*)()) 0xFF8704F4)();
+    ((void (*)(int)) 0xFF8293DC)(0);
+  } else {
+    _reboot_fw_update(fw_update);
+  }
+}
+
+void switch_mode(int mode)
+{
+  if ( mode == 0 )
+  {
+    _Rec2PB();
+    _set_control_event(0x80000902); // 0x10A5 ConnectUSBCable
+  } else if ( mode == 1 )
+  {
+    _set_control_event(0x902); // 0x10A6 DisconnectUSBCable
+    _PB2Rec();
+  }
+}
