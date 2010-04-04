@@ -8,9 +8,7 @@ NHSTUB(kbd_pwr_off,		0xFFC356C8)
 //NHSTUB(MakeBootDisk,		0xFFDF24E4)
 //NHSTUB(MakeScriptDisk,		0xFFDF24F8)
 
-// incorrect, using nullsub for now
-//NHSTUB(PostLEDMessage,	    0xFFC34B78)
-NHSTUB(PostLEDMessage,	    0xFFC00948)
+NHSTUB(LEDDrive,	    		0xFFC34CE0)
 
 //NHSTUB(TurnOnAFLamp,		0xFFDB9BAC)
 
@@ -67,7 +65,7 @@ NHSTUB(rewinddir,			 0xFFC00948)
 //NSTUB(DisableDispatch,			 0xFFC00948)
 //NSTUB(DisplayImagePhysicalScreen,	 0xFFC00948)
 //NSTUB(EnableDispatch,			 0xFFC00948)
-NHSTUB(GetFocusLensSubjectDistanceFromLens, 0xFFC00948)
+//NHSTUB(GetFocusLensSubjectDistanceFromLens, 0xFFC00948)
 //NSTUB(MakeDirectory,			 0xFFC00948)
 //NSTUB(PhySw_testgpio,			 0xFFC356EC)
 //NSTUB(ProtectFile,			 0xFFC00948)
@@ -97,7 +95,7 @@ NHSTUB(SetZoomActuatorSpeedPercent, 0xFFC00948)
 //NHSTUB(GetBatteryTemperature,	0xFFC377B4)
 //NHSTUB(GetOpticalTemperature,	0xFFC37824)
 //NHSTUB(GetCCDTemperature,		0xFFC37744)
-NHSTUB(MakeAFScan,		0xFFC00948)
+NHSTUB(MakeAFScan, 			    0xFFDEEA0C)       // was 0xFFC00948 (nullsub_1) OldGit 20-Jan-2010
 //NHSTUB(utime, 0xFFC00948)
 NHSTUB(ExpCtrlTool_StopContiAE,		0xFFC22054)
 NHSTUB(ExpCtrlTool_StartContiAE,	0xFFC21F10)
@@ -108,5 +106,6 @@ NHSTUB(DoAFLock, 0xffc15b04)
 NHSTUB(UnlockAF, 0xffc15c1c)
 NHSTUB(apex2us, 0xFFD7DD6C)
 NHSTUB(WriteSDCard, 0xFFD01548)
+NHSTUB(SetScriptMode, 0xFFC61F08) // string
 
 

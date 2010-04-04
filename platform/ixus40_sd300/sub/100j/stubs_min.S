@@ -19,3 +19,5 @@ DEF(canon_shoot_menu_active,0x68F1) //WRONG! COPIED FROM SD400
 DEF(recreview_hold, 0x117A8) //WRONG
 
 
+DEF(levent_table,0xFF9514F0)
+DEF(playrec_mode,0x598C) // "MenuIn"

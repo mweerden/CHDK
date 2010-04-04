@@ -68,13 +68,13 @@ NHSTUB(GetSystemTime, 									0xffdf0aa8)
 NHSTUB(GetBatteryTemperature, 					0xFFC33494) //found at 0xffc33504 but camera crashs if used, so point to GetCCDTemperature
 NHSTUB(GetCCDTemperature, 							0xFFC33494)
 NHSTUB(GetCurrentAvValue, 							0xffd0025c)
-NHSTUB(GetCurrentTargetDistance, 			  0xffcff354)
+//NHSTUB(GetCurrentTargetDistance, 			  0xffcff354)
 
 NHSTUB(GetDrive_ClusterSize, 						0xffc3fc24)
 NHSTUB(GetDrive_FreeClusters, 					0xFFC3FC8C)
 NHSTUB(GetDrive_TotalClusters, 					0xFFC3FC58)
 
-NHSTUB(GetFocusLensSubjectDistance, 		0xffded04c)
+//NHSTUB(GetFocusLensSubjectDistance, 		0xffded04c)
 NHSTUB(MoveFocusLensToDistance, 				0xffe4135c)
 NHSTUB(GetOpticalTemperature, 					0xffc33574)
 
@@ -130,6 +130,7 @@ NHSTUB(open, 														0xffc09ea0)
 NHSTUB(opendir, 												0xffddcde8)
 NHSTUB(openfastdir, 										0xffddcde8)
 
+NHSTUB(qsort, 													0xFFE2CB98)
 NHSTUB(rand, 														0xffc0d9bc)
 
 NHSTUB(read, 														0xffc0a138)
@@ -170,3 +171,5 @@ NHSTUB(SetZoomActuatorSpeedPercent,	0xFFC00940) // nullsub
 NHSTUB(Unmount_FileSystem,					0xFFC00940)
 NHSTUB(Mount_FileSystem,						0xFFC00940)
 NHSTUB(rewinddir,										0xFFC00940)
+
+NHSTUB(SetScriptMode,										0xFFC5C77C) // string

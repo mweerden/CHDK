@@ -19,7 +19,8 @@ NHSTUB(strchr, 0xFF88FCAC)
 //NHSTUB(SetPropertyCase, 0xFF8741E0)
 NHSTUB(kbd_read_keys_r2, 0xFF847B04)
 NHSTUB(strrchr, 0xFF9D7430)
-NHSTUB(GetCurrentTargetDistance, 0xFF92F7E4)
+//NHSTUB(GetCurrentTargetDistance, 0xFF92F7E4)
+NHSTUB(GetFocusLensSubjectDistance, 0xFF92F7E4)
 //NHSTUB(GetOpticalTemperature, 0xFF84B61C)
 //NHSTUB(kbd_p2_f, 0xFF821760)
 NHSTUB(PostLogicalEventForNotPowerType, 0xFF879A08)
@@ -34,9 +35,10 @@ NHSTUB(GiveSemaphore, 0xFF827228)
 NHSTUB(eventproc_export_PostLogicalEventToUI, 0xff879a54)
 NHSTUB(eventproc_export_SleepTask, 0xff827490)
 NHSTUB(eventproc_export_ExitTask, 0xff81b23c)
-NHSTUB(MakeAFScan, 0xFF93B4B8)	              //different from other cams but simular to SX110
+NHSTUB(MakeAFScan, 0xFF93B538)                    // different from other cams but simular to SX100 and SX110
 NHSTUB(PostLEDMessage, 0xFF847470 )               //questionable, might be wrong... simular to SX110
 NHSTUB(UnsetZoomForMovie, 0xFF969764)             // found via search for ZoomCon_UnsetZoomForMovie string
+NHSTUB(SetScriptMode, 0xFF87BA80)             // "SetScriptMode"
 
 
 // found by tr1stan and validated

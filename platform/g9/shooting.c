@@ -80,6 +80,56 @@ const ISOTable iso_table[] = {
     {  6, 1600, "1600", -1},
 };          
 
+/*
+http://www.usa.canon.com/consumer/controller?act=ModelInfoAct&fcategoryid=222&modelid=15669#ModelTechSpecsAct
+Shooting Modes
+	Auto, P, Av, Tv, M, C1, C2,
+	Special Scene
+		(Portrait, Landscape, Night Scene, Sports, Foliage, 
+		Snow, Beach, Fireworks, Aquarium, Underwater, Indoor,
+		ISO 3200, Kids & Pets, Night Snapshot, Color Accent, Color Swap),
+	Stitch Assist, Movie
+
+Movie: 1024 x 768 (15 fps), 640 x 480 (30 fps/30 fps LP), 640 x 480 (2 hours at 0.5 fps/1 fps), 320 x 240 (30 fps) available up to 4GB or 60 minutes, 160 x 120 (3 minutes at 15 fps)
+
+canon modelist in 100d 
+*/
+static const CapturemodeMap modemap[] = {
+    { MODE_AUTO,               32768 },
+    { MODE_P,                  32772 },
+    { MODE_TV,                 32771 },
+    { MODE_AV,                 32770 },
+    { MODE_M,                  32769 },
+    { MODE_VIDEO_STD,          2597  },
+    { MODE_VIDEO_HIRES,        2600  },
+    { MODE_VIDEO_COMPACT,      2599  },
+    { MODE_VIDEO_COLOR_SWAP,   2596  },
+    { MODE_VIDEO_COLOR_ACCENT, 2595  },
+    { MODE_VIDEO_TIME_LAPSE,   2601  },
+    { MODE_STITCH,             33290 },
+    { MODE_SCN_PORTRAIT,       16397 },
+    { MODE_SCN_NIGHT_SCENE,    16398 },
+    { MODE_SCN_NIGHT_SNAPSHOT, 16395 },
+    { MODE_SCN_INDOOR,         16401 },
+    { MODE_SCN_SNOW,           16403 },
+    { MODE_SCN_FIREWORK,       16405 },
+    { MODE_SCN_UNDERWATER,     16406 },
+    { MODE_SCN_COLOR_ACCENT,   16922 },
+    { MODE_SCN_SPORT,          16903 },
+    { MODE_SCN_KIDS_PETS,      16400 },
+    { MODE_SCN_FOLIAGE,        16402 },
+    { MODE_SCN_BEACH,          16404 },
+    { MODE_SCN_AQUARIUM,       16407 },
+    { MODE_SCN_ISO_3200,       16412 },
+    { MODE_SCN_COLOR_SWAP,	   16923 },
+    { MODE_SCN_LANDSCAPE,      16396 }
+/*
+probably C1, C2
+ROM:FFB080B4                 DCW 8223
+ROM:FFB080B6                 DCW 8224
+*/
+};
+
 #include "../generic/shooting.c"
 
 const int dof_tbl[] = {7400, 8210, 9040, 9860, 10670, 12730, 14780, 16820, 18890, 21970, 25030, 29170, 36780, 44400};
@@ -105,4 +155,4 @@ long get_target_dir_num() {
     return n;
 }
 
-int circle_of_confusion = 5;
+int circle_of_confusion = 6;

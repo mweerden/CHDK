@@ -1,4 +1,40 @@
-SX200 IS
-- DryOS Camera
-- Test Build.
+************************************
+SX200 IS Notes
+
+To enter CHDK <Alt> mode use the Print button.
+
+Custom Curves do not work with the SX200.
+
+The SX200 normally starts in Playback mode, 
+to switch to Record mode half press the Shutter button once. 
+
+To start directly in Record mode, 
+hold down the Power button ~ 2 seconds 
+
+Support for dual partition is available, 
+so SDHC cards > 4GB can use autostart method. 
+
+Optical Zoom - To use Optical Zoom during Video record :-
+
+1.   Set Digital Zoom = "Standard" in the Canon menu.
+2.   Set Enable Otical Zoom "on" in the CHDK menu.
+3.   Start recording, then press Zoom Out lever ~ 2 secs.
+
+Note that sound recording is always enabled in Video Record mode.
+
+AF in Video mode
+  To enable set "AF Key" (Set or Shutter) in the CHDK menu,
+  during video recording press the AF Key to make a single AF scan.
+
+
+Shortcut Keys
+ In Alt mode
+ TOGGLE RAW                DISPLAY Key
+ In Half press shoot Mode  
+ TOGGLE HISTO              DOWN Key
+ TOGGLE ZEBRA              MENU Key
+ TOGGLE OSD                RIGHT Key
+ TOGGLE DISABLE OVERRIDES  LEFT Key
+
+
 

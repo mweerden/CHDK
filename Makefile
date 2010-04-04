@@ -171,9 +171,9 @@ batch-zip: version
 	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=100e NO_INC_BUILD=1 firzipsub
 	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=101a NO_INC_BUILD=1 firzipsub
 	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=102b NO_INC_BUILD=1 firzipsub
-	$(MAKE) -s --no-print-directory PLATFORM=ixus950_sd850   PLATFORMSUB=100c NO_INC_BUILD=1 firzipsub	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=100e NO_INC_BUILD=1 firzipsub	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=101b NO_INC_BUILD=1 firzipsub	
+	$(MAKE) -s --no-print-directory PLATFORM=ixus950_sd850   PLATFORMSUB=100c NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=100e NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=101b NO_INC_BUILD=1 firzipsub
 	$(MAKE) -s --no-print-directory PLATFORM=ixus40_sd300    PLATFORMSUB=100k NO_INC_BUILD=1 firzipsub
 	$(MAKE) -s --no-print-directory PLATFORM=ixus40_sd300    PLATFORMSUB=100j NO_INC_BUILD=1 firzipsub
 	$(MAKE) -s --no-print-directory PLATFORM=ixus50_sd400    PLATFORMSUB=101a NO_INC_BUILD=1 firzipsub
@@ -223,6 +223,13 @@ batch-zip: version
 	$(MAKE) -s --no-print-directory PLATFORM=a470  PLATFORMSUB=102c NO_INC_BUILD=1 firzipsub
 	$(MAKE) -s --no-print-directory PLATFORM=sx110is  PLATFORMSUB=100b NO_INC_BUILD=1 firzipsub
 	$(MAKE) -s --no-print-directory PLATFORM=sx200is  PLATFORMSUB=100c NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=ixus90_sd790  PLATFORMSUB=100c NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=ixus90_sd790  PLATFORMSUB=100d NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100f NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100j NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100l NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=ixus100_sd780  PLATFORMSUB=100c NO_INC_BUILD=1 firzipsub
+	$(MAKE) -s --no-print-directory PLATFORM=a480  PLATFORMSUB=100b NO_INC_BUILD=1 firzipsub
 	@echo "**** All firmwares created successfully"
 	@echo "**** Copying duplicate Firmwares"
 	cp $(topdir)bin/$(VER)-a610-100e-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-a610-100d-$(BUILD_NUMBER).zip
@@ -237,20 +244,24 @@ batch-zip: version
 	cp $(topdir)bin/$(VER)-g9-100i-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-g9-100h-$(BUILD_NUMBER).zip
 	cp $(topdir)bin/$(VER)-a470-101b-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-a470-101a-$(BUILD_NUMBER).zip
 	cp $(topdir)bin/$(VER)-sx200is-100c-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx200is-100d-$(BUILD_NUMBER).zip
+	cp $(topdir)bin/$(VER)-ixus960_sd950-100d-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus960_sd950-100c-$(BUILD_NUMBER).zip
+	cp $(topdir)bin/$(VER)-ixus90_sd790-100d-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus90_sd790-100e-$(BUILD_NUMBER).zip
+	cp $(topdir)bin/$(VER)-g11-100j-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-g11-100k-$(BUILD_NUMBER).zip
 	mv $(topdir)bin/$(VER)-sx1-200h-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx1-200h-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/$(VER)-sx1-201a-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx1-201a-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/$(VER)-sx10-100c-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx10-100c-$(BUILD_NUMBER)_BETA.zip	
-	mv $(topdir)bin/$(VER)-sx10-101b-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx10-101b-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/$(VER)-sx10-102b-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx10-102b-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/$(VER)-sx10-103a-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx10-103a-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/$(VER)-sx200is-100c-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx200is-100c-$(BUILD_NUMBER)_BETA.zip	
-	mv $(topdir)bin/$(VER)-sx200is-100d-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx200is-100d-$(BUILD_NUMBER)_BETA.zip	
+	mv $(topdir)bin/$(VER)-sx200is-100c-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx200is-100c-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-sx200is-100d-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-sx200is-100d-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/$(VER)-ixus980_sd990-100e-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus980_sd990-100e-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/$(VER)-ixus980_sd990-101b-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus980_sd990-101b-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/$(VER)-ixus870_sd880-100e-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus870_sd880-100e-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/$(VER)-ixus870_sd880-101a-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus870_sd880-101a-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/$(VER)-ixus870_sd880-102b-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus870_sd880-102b-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/$(VER)-a2000-100c-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-a2000-100c-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-ixus90_sd790-100c-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus90_sd790-100c-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-ixus90_sd790-100d-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus90_sd790-100d-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-ixus90_sd790-100e-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus90_sd790-100e-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-g11-100f-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-g11-100f-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-g11-100j-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-g11-100j-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-g11-100k-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-g11-100k-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-g11-100l-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-g11-100l-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/$(VER)-ixus100_sd780-100c-$(BUILD_NUMBER).zip $(topdir)bin/$(VER)-ixus100_sd780-100c-$(BUILD_NUMBER)_BETA.zip
 	@echo "**** Done Copying duplicate Firmwares"
 	@echo "**** Summary of memisosizes"
 	cat $(topdir)bin/caminfo.txt
@@ -293,9 +304,9 @@ batch-zip-complete: version
 	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=100e NO_INC_BUILD=1 firzipsubcomplete
 	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=101a NO_INC_BUILD=1 firzipsubcomplete
 	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=102b NO_INC_BUILD=1 firzipsubcomplete
-	$(MAKE) -s --no-print-directory PLATFORM=ixus950_sd850   PLATFORMSUB=100c NO_INC_BUILD=1 firzipsubcomplete	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=100e NO_INC_BUILD=1 firzipsubcomplete	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=101b NO_INC_BUILD=1 firzipsubcomplete	
+	$(MAKE) -s --no-print-directory PLATFORM=ixus950_sd850   PLATFORMSUB=100c NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=100e NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=101b NO_INC_BUILD=1 firzipsubcomplete
 	$(MAKE) -s --no-print-directory PLATFORM=ixus40_sd300    PLATFORMSUB=100k NO_INC_BUILD=1 firzipsubcomplete
 	$(MAKE) -s --no-print-directory PLATFORM=ixus40_sd300    PLATFORMSUB=100j NO_INC_BUILD=1 firzipsubcomplete
 	$(MAKE) -s --no-print-directory PLATFORM=ixus50_sd400    PLATFORMSUB=101a NO_INC_BUILD=1 firzipsubcomplete
@@ -345,6 +356,13 @@ batch-zip-complete: version
 	$(MAKE) -s --no-print-directory PLATFORM=a470  PLATFORMSUB=102c NO_INC_BUILD=1 firzipsubcomplete
 	$(MAKE) -s --no-print-directory PLATFORM=sx110is  PLATFORMSUB=100b NO_INC_BUILD=1 firzipsubcomplete
 	$(MAKE) -s --no-print-directory PLATFORM=sx200is  PLATFORMSUB=100c NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=ixus90_sd790  PLATFORMSUB=100c NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=ixus90_sd790  PLATFORMSUB=100d NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100f NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100j NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100l NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=ixus100_sd780  PLATFORMSUB=100c NO_INC_BUILD=1 firzipsubcomplete
+	$(MAKE) -s --no-print-directory PLATFORM=a480  PLATFORMSUB=100b NO_INC_BUILD=1 firzipsubcomplete
 	@echo "**** All zipfiles including firmwares and extra stuff created successfully"
 	@echo "**** Copying duplicate Firmwares"
 	cp $(topdir)bin/a610-100e-$(BUILD_NUMBER)-full.zip $(topdir)bin/a610-100d-$(BUILD_NUMBER)-full.zip
@@ -371,18 +389,16 @@ batch-zip-complete: version
 	cp $(topdir)bin/a470-101b-$(BUILD_NUMBER).zip $(topdir)bin/a470-101a-$(BUILD_NUMBER).zip
 	cp $(topdir)bin/sx200is-100c-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx200is-100d-$(BUILD_NUMBER)-full.zip
 	cp $(topdir)bin/sx200is-100c-$(BUILD_NUMBER).zip $(topdir)bin/sx200is-100d-$(BUILD_NUMBER).zip
+	cp $(topdir)bin/ixus960_sd950-100d-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus960_sd950-100c-$(BUILD_NUMBER)-full.zip
+	cp $(topdir)bin/ixus960_sd950-100d-$(BUILD_NUMBER).zip $(topdir)bin/ixus960_sd950-100c-$(BUILD_NUMBER).zip
+	cp $(topdir)bin/ixus90_sd790-100d-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus90_sd790-100e-$(BUILD_NUMBER)-full.zip
+	cp $(topdir)bin/ixus90_sd790-100d-$(BUILD_NUMBER).zip $(topdir)bin/ixus90_sd790-100e-$(BUILD_NUMBER).zip
+	cp $(topdir)bin/g11-100j-$(BUILD_NUMBER)-full.zip $(topdir)bin/g11-100k-$(BUILD_NUMBER)-full.zip
+	cp $(topdir)bin/g11-100j-$(BUILD_NUMBER).zip $(topdir)bin/g11-100k-$(BUILD_NUMBER).zip
 	mv $(topdir)bin/sx1-200h-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx1-200h-$(BUILD_NUMBER)-full_BETA.zip
 	mv $(topdir)bin/sx1-200h-$(BUILD_NUMBER).zip $(topdir)bin/sx1-200h-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/sx1-201a-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx1-201a-$(BUILD_NUMBER)-full_BETA.zip
 	mv $(topdir)bin/sx1-201a-$(BUILD_NUMBER).zip $(topdir)bin/sx1-201a-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/sx10-100c-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx10-100c-$(BUILD_NUMBER)-full_BETA.zip
-	mv $(topdir)bin/sx10-100c-$(BUILD_NUMBER).zip $(topdir)bin/sx10-100c-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/sx10-101b-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx10-101b-$(BUILD_NUMBER)-full_BETA.zip
-	mv $(topdir)bin/sx10-101b-$(BUILD_NUMBER).zip $(topdir)bin/sx10-101b-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/sx10-102b-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx10-102b-$(BUILD_NUMBER)-full_BETA.zip
-	mv $(topdir)bin/sx10-102b-$(BUILD_NUMBER).zip $(topdir)bin/sx10-102b-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/sx10-103a-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx10-103a-$(BUILD_NUMBER)-full_BETA.zip
-	mv $(topdir)bin/sx10-103a-$(BUILD_NUMBER).zip $(topdir)bin/sx10-103a-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/sx200is-100c-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx200is-100c-$(BUILD_NUMBER)-full_BETA.zip
 	mv $(topdir)bin/sx200is-100c-$(BUILD_NUMBER).zip $(topdir)bin/sx200is-100c-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/sx200is-100d-$(BUILD_NUMBER)-full.zip $(topdir)bin/sx200is-100d-$(BUILD_NUMBER)-full_BETA.zip
@@ -391,14 +407,24 @@ batch-zip-complete: version
 	mv $(topdir)bin/ixus980_sd990-100e-$(BUILD_NUMBER).zip $(topdir)bin/ixus980_sd990-100e-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/ixus980_sd990-101b-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus980_sd990-101b-$(BUILD_NUMBER)-full_BETA.zip
 	mv $(topdir)bin/ixus980_sd990-101b-$(BUILD_NUMBER).zip $(topdir)bin/ixus980_sd990-101b-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/ixus870_sd880-100e-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus870_sd880-100e-$(BUILD_NUMBER)-full_BETA.zip
-	mv $(topdir)bin/ixus870_sd880-100e-$(BUILD_NUMBER).zip $(topdir)bin/ixus870_sd880-100e-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/ixus870_sd880-101a-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus870_sd880-101a-$(BUILD_NUMBER)-full_BETA.zip
-	mv $(topdir)bin/ixus870_sd880-101a-$(BUILD_NUMBER).zip $(topdir)bin/ixus870_sd880-101a-$(BUILD_NUMBER)_BETA.zip
-	mv $(topdir)bin/ixus870_sd880-102b-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus870_sd880-102b-$(BUILD_NUMBER)-full_BETA.zip
-	mv $(topdir)bin/ixus870_sd880-102b-$(BUILD_NUMBER).zip $(topdir)bin/ixus870_sd880-102b-$(BUILD_NUMBER)_BETA.zip
 	mv $(topdir)bin/a2000-100c-$(BUILD_NUMBER)-full.zip $(topdir)bin/a2000-100c-$(BUILD_NUMBER)-full_BETA.zip
 	mv $(topdir)bin/a2000-100c-$(BUILD_NUMBER).zip $(topdir)bin/a2000-100c-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/ixus90_sd790-100c-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus90_sd790-100c-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/ixus90_sd790-100c-$(BUILD_NUMBER).zip $(topdir)bin/ixus90_sd790-100c-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/ixus90_sd790-100d-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus90_sd790-100d-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/ixus90_sd790-100d-$(BUILD_NUMBER).zip $(topdir)bin/ixus90_sd790-100d-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/ixus90_sd790-100e-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus90_sd790-100e-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/ixus90_sd790-100e-$(BUILD_NUMBER).zip $(topdir)bin/ixus90_sd790-100e-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/g11-100f-$(BUILD_NUMBER)-full.zip $(topdir)bin/g11-100f-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/g11-100f-$(BUILD_NUMBER).zip $(topdir)bin/g11-100f-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/g11-100j-$(BUILD_NUMBER)-full.zip $(topdir)bin/g11-100j-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/g11-100j-$(BUILD_NUMBER).zip $(topdir)bin/g11-100j-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/g11-100k-$(BUILD_NUMBER)-full.zip $(topdir)bin/g11-100k-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/g11-100k-$(BUILD_NUMBER).zip $(topdir)bin/g11-100k-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/g11-100l-$(BUILD_NUMBER)-full.zip $(topdir)bin/g11-100l-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/g11-100l-$(BUILD_NUMBER).zip $(topdir)bin/g11-100l-$(BUILD_NUMBER)_BETA.zip
+	mv $(topdir)bin/ixus100_sd780-100c-$(BUILD_NUMBER)-full.zip $(topdir)bin/ixus100_sd780-100c-$(BUILD_NUMBER)-full_BETA.zip
+	mv $(topdir)bin/ixus100_sd780-100c-$(BUILD_NUMBER).zip $(topdir)bin/ixus100_sd780-100c-$(BUILD_NUMBER)_BETA.zip
 	@echo "**** Done Copying duplicate Firmwares"
 	@echo "**** Summary of memisosizes"
 	cat $(topdir)bin/caminfo.txt
@@ -439,13 +465,13 @@ batch-clean:
 	$(MAKE) -s --no-print-directory PLATFORM=ixus800_sd700   PLATFORMSUB=101b NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=ixus800_sd700   PLATFORMSUB=100b NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=ixus850_sd800   PLATFORMSUB=100e NO_INC_BUILD=1 clean
-	$(MAKE) -s --no-print-directory PLATFORM=ixus860_sd870   PLATFORMSUB=100c NO_INC_BUILD=1 clean	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=100e NO_INC_BUILD=1 clean	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=101a NO_INC_BUILD=1 clean	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=102b NO_INC_BUILD=1 clean	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus950_sd850   PLATFORMSUB=100c NO_INC_BUILD=1 clean	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=100e NO_INC_BUILD=1 clean	
-	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=101b NO_INC_BUILD=1 clean	
+	$(MAKE) -s --no-print-directory PLATFORM=ixus860_sd870   PLATFORMSUB=100c NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=100e NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=101a NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus870_sd880   PLATFORMSUB=102b NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus950_sd850   PLATFORMSUB=100c NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=100e NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus980_sd990   PLATFORMSUB=101b NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=ixus40_sd300    PLATFORMSUB=100k NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=ixus40_sd300    PLATFORMSUB=100j NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=ixus50_sd400    PLATFORMSUB=101a NO_INC_BUILD=1 clean
@@ -479,7 +505,7 @@ batch-clean:
 	$(MAKE) -s --no-print-directory PLATFORM=ixus960_sd950  PLATFORMSUB=100d NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=ixus80_sd1100  PLATFORMSUB=100c NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=ixus80_sd1100  PLATFORMSUB=101a NO_INC_BUILD=1 clean
-	$(MAKE) -s --no-print-directory PLATFORM=ixusizoom_sd30  PLATFORMSUB=100g NO_INC_BUILD=1 clean	
+	$(MAKE) -s --no-print-directory PLATFORM=ixusizoom_sd30  PLATFORMSUB=100g NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=sx10 PLATFORMSUB=101a NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=sx10 PLATFORMSUB=102b NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=sx1 PLATFORMSUB=200h NO_INC_BUILD=1 clean
@@ -491,4 +517,11 @@ batch-clean:
 	$(MAKE) -s --no-print-directory PLATFORM=a470  PLATFORMSUB=102c NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=sx110is  PLATFORMSUB=100b NO_INC_BUILD=1 clean
 	$(MAKE) -s --no-print-directory PLATFORM=sx200is  PLATFORMSUB=100c NO_INC_BUILD=1 clean
-.PHONY: fir upload
+	$(MAKE) -s --no-print-directory PLATFORM=ixus90_sd790  PLATFORMSUB=100c NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus90_sd790  PLATFORMSUB=100d NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100f NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100j NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=g11  PLATFORMSUB=100l NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=ixus100_sd780  PLATFORMSUB=100c NO_INC_BUILD=1 clean
+	$(MAKE) -s --no-print-directory PLATFORM=a480  PLATFORMSUB=100b NO_INC_BUILD=1 clean
+	.PHONY: fir upload

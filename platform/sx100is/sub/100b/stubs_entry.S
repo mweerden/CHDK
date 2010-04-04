@@ -29,12 +29,12 @@ NSTUB(GetBatteryTemperature, 0xffc3a31c)
 // Best match: 96%
 NSTUB(GetCCDTemperature, 0xffc3a2ac)
 NSTUB(GetCurrentAvValue, 0xffd0afd4)
-NSTUB(GetCurrentTargetDistance, 0xffd08e68)
 NSTUB(GetDrive_ClusterSize, 0xffc4066c)
 NSTUB(GetDrive_FreeClusters, 0xffc4070c)
 NSTUB(GetDrive_TotalClusters, 0xffc406a0)
-// Best match: 87%
-NSTUB(GetFocusLensSubjectDistance, 0xffd0a2c8)
+NSTUB(GetFocusLensSubjectDistance, 0xffd08e68)
+// Best match: 94%
+NSTUB(GetFocusLensSubjectDistanceFromLens, 0xffd09174)
 // Best match: 92%
 NSTUB(GetOpticalTemperature, 0xffc3a38c)
 NSTUB(GetParameterData, 0xffd26868)
@@ -54,13 +54,19 @@ NSTUB(MoveZoomLensWithPoint, 0xffd0ee40)
 NSTUB(NewTaskShell, 0xffc5b710)
 NSTUB(Open, 0xffc15024)
 // ERROR: PT_PlaySound is not found!
+NSTUB(PostLogicalEventForNotPowerType, 0xffc5d6b0)
+NSTUB(PostLogicalEventToUI, 0xffc5d6fc)
 NSTUB(Read, 0xffc0a440)
 NSTUB(ReadFastDir, 0xffddc67c)
 NSTUB(RefreshPhysicalScreen, 0xffd79fa0)
 NSTUB(Remove, 0xffc15094)
 NSTUB(RenameFile_Fut, 0xffc14860)
 NSTUB(SetAutoShutdownTime, 0xffc5f788)
+// Best match: 81%
+NSTUB(SetCurrentCaptureModeType, 0xffc66210)
 NSTUB(SetFileTimeStamp, 0xffc15328)
+// Best match: 78%
+NSTUB(SetLogicalEventActive, 0xffc5f44c)
 NSTUB(SetParameterData, 0xffd267d8)
 NSTUB(SetPropertyCase, 0xffc5bb84)
 // Best match: 92%
@@ -126,6 +132,7 @@ NSTUB(strncmp, 0xffc765ac)
 NSTUB(strncpy, 0xffc0e84c)
 NSTUB(strrchr, 0xffc7661c)
 NSTUB(strtol, 0xffc20338)
+NSTUB(strtolx, 0xffc2013c)
 NSTUB(time, 0xffc57f6c)
 NSTUB(vsprintf, 0xffc0e7b4)
 NSTUB(write, 0xffc0a4a0)

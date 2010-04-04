@@ -30,13 +30,13 @@ NSTUB(GetBatteryTemperature, 0xffc377b4)
 NSTUB(GetCCDTemperature, 0xffc37744)
 // Best match: 88%
 NSTUB(GetCurrentAvValue, 0xffd0ce14)
-// Best match: 64%
-NSTUB(GetCurrentTargetDistance, 0xffd0b310)
 NSTUB(GetDrive_ClusterSize, 0xffc41688)
 NSTUB(GetDrive_FreeClusters, 0xffc416f0)
 NSTUB(GetDrive_TotalClusters, 0xffc416bc)
-// Best match: 93%
-NSTUB(GetFocusLensSubjectDistance, 0xffded6f8)
+// Best match: 64%
+NSTUB(GetFocusLensSubjectDistance, 0xffd0b310)
+// Best match: 78%
+NSTUB(GetFocusLensSubjectDistanceFromLens, 0xffd0b61c)
 // Best match: 92%
 NSTUB(GetOpticalTemperature, 0xffc37824)
 // Best match: 96%
@@ -64,6 +64,8 @@ NSTUB(NewTaskShell, 0xffc5d578)
 NSTUB(Open, 0xffc13b60)
 // Best match: 81%
 NSTUB(PT_PlaySound, 0xffc4c8b8)
+NSTUB(PostLogicalEventForNotPowerType, 0xffc6178c)
+NSTUB(PostLogicalEventToUI, 0xffc617d8)
 NSTUB(Read, 0xffc0a15c)
 NSTUB(ReadFastDir, 0xffdd96c0)
 // Best match: 62%
@@ -73,7 +75,11 @@ NSTUB(Remove, 0xffc13bd0)
 NSTUB(RenameFile_Fut, 0xffc133e0)
 // Best match: 93%
 NSTUB(SetAutoShutdownTime, 0xffc62190)
+// Best match: 90%
+NSTUB(SetCurrentCaptureModeType, 0xffc68210)
 NSTUB(SetFileTimeStamp, 0xffc13e64)
+// Best match: 64%
+NSTUB(SetLogicalEventActive, 0xffc61eb8)
 // Best match: 96%
 NSTUB(SetParameterData, 0xffd35228)
 // Best match: 65%
@@ -147,6 +153,7 @@ NSTUB(strncmp, 0xffc74db0)
 NSTUB(strncpy, 0xffc1dcc8)
 NSTUB(strrchr, 0xffc74e20)
 NSTUB(strtol, 0xffc1df00)
+NSTUB(strtolx, 0xffc1dd04)
 NSTUB(time, 0xffc57a88)
 NSTUB(vsprintf, 0xffc0d80c)
 NSTUB(write, 0xffc0a1bc)

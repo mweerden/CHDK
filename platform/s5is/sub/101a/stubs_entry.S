@@ -33,13 +33,13 @@ NSTUB(GetBatteryTemperature, 0xff85062c)
 NSTUB(GetCCDTemperature, 0xff8505bc)
 // Best match: 62%
 NSTUB(GetCurrentAvValue, 0xff952e5c)
-// Best match: 64%
-NSTUB(GetCurrentTargetDistance, 0xff95126c)
 NSTUB(GetDrive_ClusterSize, 0xff856dd0)
 NSTUB(GetDrive_FreeClusters, 0xff856e70)
 NSTUB(GetDrive_TotalClusters, 0xff856e04)
-// Best match: 62%
-NSTUB(GetFocusLensSubjectDistance, 0xff952528)
+// Best match: 64%
+NSTUB(GetFocusLensSubjectDistance, 0xff95126c)
+// Best match: 73%
+NSTUB(GetFocusLensSubjectDistanceFromLens, 0xff951568)
 // Best match: 96%
 NSTUB(GetOpticalTemperature, 0xff85069c)
 // ERROR: GetParameterData is not found!
@@ -61,6 +61,8 @@ NSTUB(MoveFocusLensToDistance, 0xffa0d4e4)
 NSTUB(Open, 0xff825d64)
 // Best match: 54%
 NSTUB(PT_PlaySound, 0xff864244)
+NSTUB(PostLogicalEventForNotPowerType, 0xff87617c)
+NSTUB(PostLogicalEventToUI, 0xff8761c8)
 NSTUB(Read, 0xff81a2c8)
 NSTUB(ReadFastDir, 0xffa279c8)
 // Best match: 85%
@@ -69,7 +71,10 @@ NSTUB(Remove, 0xff825dd4)
 NSTUB(RenameFile_Fut, 0xff8255a0)
 // Best match: 61%
 NSTUB(SetAutoShutdownTime, 0xff877f50)
+// Best match: 81%
+NSTUB(SetCurrentCaptureModeType, 0xff87f94c)
 NSTUB(SetFileTimeStamp, 0xff826068)
+NSTUB(SetLogicalEventActive, 0xff877bb4)
 // ERROR: SetParameterData is not found!
 // ERROR: SetPropertyCase is not found!
 // Best match: 92%
@@ -136,6 +141,7 @@ NSTUB(strncmp, 0xff8b3230)
 NSTUB(strncpy, 0xff81e688)
 NSTUB(strrchr, 0xff8b32a0)
 NSTUB(strtol, 0xff831dac)
+NSTUB(strtolx, 0xff831bb0)
 NSTUB(time, 0xff870bd0)
 NSTUB(vsprintf, 0xff81e5f0)
 NSTUB(write, 0xff81a328)

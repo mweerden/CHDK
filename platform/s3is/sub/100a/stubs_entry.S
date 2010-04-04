@@ -57,6 +57,9 @@ NSTUB(MoveFocusLensToDistance, 0xffb0c824)
 NSTUB(Open, 0xff87139c)
 // Best match: 89%
 NSTUB(PhySw_testgpio, 0xff82835c)
+NSTUB(PostLogicalEventForNotPowerType, 0xff98b048)
+NSTUB(PostLogicalEventToUI, 0xff98b0c4)
+// ALT: NSTUB(PostLogicalEventToUI, 0xff98b14c) // 21/0
 NSTUB(ProtectFile, 0xff869730)
 // Best match: 92%
 NSTUB(PutInNdFilter, 0xffb0a54c)
@@ -77,6 +80,9 @@ NSTUB(RefreshPhysicalScreen, 0xff9a7b10)
 NSTUB(Remove, 0xff8713e4)
 NSTUB(RenameFile_Fut, 0xff869f44)
 NSTUB(SetAutoShutdownTime, 0xff98f01c)
+NSTUB(SetCurrentCaptureModeType, 0xff9c3db8)
+// Best match: 88%
+NSTUB(SetLogicalEventActive, 0xff98ce10)
 // Best match: 86%
 NSTUB(SetParameterData, 0xff994a88)
 NSTUB(SetPropertyCase, 0xff824870)
@@ -168,6 +174,7 @@ NSTUB(strpbrk, 0xffb4f700)
 NSTUB(strrchr, 0xffb4f73c)
 // ALT: NSTUB(strrchr, 0xffb4f73c) // 8/0
 NSTUB(strtol, 0xffb4ee90)
+NSTUB(strtoul, 0xffb4f038)
 NSTUB(taskCreateHookAdd, 0xffb5a858)
 NSTUB(taskDeleteHookAdd, 0xffb5a794)
 // Best match: 82%

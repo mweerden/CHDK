@@ -147,6 +147,7 @@
 //	#define CAM_CONSOLE_LOG_ENABLED     1
     #define CAM_BRACKETING              1
     #define CAM_MULTIPART               1
+    #define CAM_EXT_TV_RANGE            1
 //==========================================================
 // A-series
 //==========================================================
@@ -272,6 +273,59 @@
     // camera name
     #define PARAM_CAMERA_NAME 4 // parameter number for GetParameterData
     //#define DNG_EXT_FROM ".DPS"	
+//----------------------------------------------------------
+
+#elif defined (CAMERA_a480)
+    #define CAM_PROPSET                 2
+    #define CAM_DRYOS                   1
+
+    #define CAM_RAW_ROWPIX              3720   
+    #define CAM_RAW_ROWS                2772   
+
+    #undef  CAM_USE_ZOOM_FOR_MF
+    #undef  CAM_HAS_ERASE_BUTTON
+    #undef  CAM_HAS_IRIS_DIAPHRAGM
+    #define CAM_HAS_ND_FILTER           1
+    #undef  CAM_HAS_MANUAL_FOCUS
+    #undef  CAM_HAS_USER_TV_MODES
+    #undef  CAM_HAS_IS
+    #define CAM_MULTIPART               1
+    #undef  CAM_VIDEO_CONTROL
+    #define CAM_REAR_CURTAIN            1
+    #undef  DEFAULT_RAW_EXT 
+    #define DEFAULT_RAW_EXT             2   // use .CR2 
+    #define CAM_EXT_TV_RANGE            1
+    #define CAM_AF_SCAN_DURING_VIDEO_RECORD 1
+    #define CAM_CAN_MUTE_MICROPHONE     1
+    #define CAM_EV_IN_VIDEO             1
+
+    #define DNG_SUPPORT                 1
+    // pattern
+    #define cam_CFAPattern 0x02010100 // Red  Green  Green  Blue
+    // color
+
+    #define CAM_COLORMATRIX1                               \
+      827547, 1000000, -290458, 1000000, -126086, 1000000, \
+     -12829,  1000000, 530507,  1000000, 50537,   1000000, \
+      5181,   1000000, 48183,   1000000, 245014,  1000000
+
+    #define cam_CalibrationIlluminant1 1 // Daylight
+    // cropping
+    #define CAM_JPEG_WIDTH  3648
+    #define CAM_JPEG_HEIGHT 2736
+    #define CAM_ACTIVE_AREA_X1 6
+    #define CAM_ACTIVE_AREA_Y1 12
+    #define CAM_ACTIVE_AREA_X2 3690
+    #define CAM_ACTIVE_AREA_Y2 2772
+
+    // camera name
+    #define PARAM_CAMERA_NAME 4 // parameter number for GetParameterData
+    #undef  CAM_SENSOR_BITS_PER_PIXEL
+    #undef  CAM_WHITE_LEVEL
+    #undef  CAM_BLACK_LEVEL
+    #define CAM_SENSOR_BITS_PER_PIXEL   12
+    #define CAM_WHITE_LEVEL             ((1<<CAM_SENSOR_BITS_PER_PIXEL)-1)
+    #define CAM_BLACK_LEVEL             127
 	
 //----------------------------------------------------------
 #elif defined (CAMERA_a530)
@@ -509,9 +563,14 @@
 // cropping
 #define CAM_JPEG_WIDTH  3264
 #define CAM_JPEG_HEIGHT 2448
-#define CAM_ACTIVE_AREA_X1 8
-#define CAM_ACTIVE_AREA_Y1 8
-#define CAM_ACTIVE_AREA_X2 3304
+#define CAM_ACTIVE_AREA_X1 12
+#define CAM_ACTIVE_AREA_Y1 10
+// note: the above contains some pixels which have valid data, 
+// but are not at the same levels as the rest of the frame
+// the values below crop the "different" looking pixels.
+//#define CAM_ACTIVE_AREA_X1 16
+//#define CAM_ACTIVE_AREA_Y1 18
+#define CAM_ACTIVE_AREA_X2 3300
 #define CAM_ACTIVE_AREA_Y2 2480
 
 // camera name
@@ -840,17 +899,15 @@
       5181,   1000000, 48183,   1000000, 245014,  1000000 
     #define cam_CalibrationIlluminant1  1 // Daylight
 
-		////////////////////////////////
-		// Unsure
-		////////////////////////////////
-//    #undef  CAM_UNCACHED_BIT
-//    #define CAM_UNCACHED_BIT    0x40000000
-
     // cropping (from ixus870_sd880)
     #define CAM_ACTIVE_AREA_X1          14
     #define CAM_ACTIVE_AREA_Y1          8
     #define CAM_ACTIVE_AREA_X2          3682
     #define CAM_ACTIVE_AREA_Y2          2764
+
+    #undef  CAM_HAS_MANUAL_FOCUS
+// for the purposes of CHDK, the FACE button is treated as the erase button
+//    #undef  CAM_HAS_ERASE_BUTTON
 
 //==========================================================
 // SD-Series (IXUS-Series)
@@ -1573,7 +1630,7 @@
     #define DNG_EXT_FROM ".CR2"
 
 //----------------------------------------------------------
- #elif defined (CAMERA_ixus970_sd890)
+#elif defined (CAMERA_ixus970_sd890)
     #define CAM_PROPSET                 2
     #define CAM_DRYOS                   1
 
@@ -1675,6 +1732,140 @@
     #define PARAM_CAMERA_NAME 4 // parameter number for GetParameterData sd990: OK
 
 //    #define DNG_EXT_FROM ".CR2"
+
+//----------------------------------------------------------
+#elif defined (CAMERA_ixus100_sd780)
+    #define CAM_PROPSET                 2
+    #define CAM_DRYOS                   1
+
+    #define CAM_RAW_ROWPIX              4080		// 12 MP 12bpp
+    #define CAM_RAW_ROWS                3048		// VERIFY_SD780 Found RAW #s by searching " CrwAddress %lx, CrwSize H %ld V %ld\r"
+
+    #undef  CAM_HAS_ERASE_BUTTON
+    #undef  CAM_USE_ZOOM_FOR_MF
+    #define CAM_MULTIPART               1
+    #undef  CAM_HAS_IRIS_DIAPHRAGM
+    #define CAM_HAS_ND_FILTER           1
+
+    #undef CAM_REMOTE
+    #undef CAM_SYNCH
+
+    #define CAM_HAS_ZOOM_LEVER          1
+
+//    #define CAM_CAN_SD_OVER_NOT_IN_MF   1			// Camera allows subject distance (focus) override when not in manual focus mode
+//    #define CAM_CAN_SD_OVERRIDE         1			// Camera allows to do subject distance override
+
+    #undef  CAM_HAS_MANUAL_FOCUS
+    #define CAM_HAS_USER_TV_MODES                 1
+    #define CAM_SHOW_OSD_IN_SHOOT_MENU            1
+    #define CAM_CAN_UNLOCK_OPTICAL_ZOOM_IN_VIDEO  1
+    #define CAM_AF_SCAN_DURING_VIDEO_RECORD       1
+    #define CAM_CHDK_HAS_EXT_VIDEO_MENU           1
+
+    #define CAM_HAS_IS                  1
+    #undef CAM_HAS_JOGDIAL
+
+    #undef  CAM_VIDEO_CONTROL
+    #define CAM_VIDEO_QUALITY_ONLY      1
+    #define DNG_SUPPORT                 1
+
+    #define CAM_EXT_TV_RANGE            1
+
+    #undef CAM_UNCACHED_BIT
+    #define CAM_UNCACHED_BIT            0x40000000
+
+    #define CAM_MAKE                    "Canon"
+
+    #undef CAM_BITMAP_PALETTE
+    #define CAM_BITMAP_PALETTE          5
+
+    #undef ZEBRA_HMARGIN0
+    #define ZEBRA_HMARGIN0              150			//zebra adjust buffer height: show use at sx200is: needed for save memory space
+
+    #define CAM_QUALITY_OVERRIDE 1
+    #undef CAM_SENSOR_BITS_PER_PIXEL
+    #define CAM_SENSOR_BITS_PER_PIXEL   12
+    #undef CAM_WHITE_LEVEL
+    #define CAM_WHITE_LEVEL             ((1<<CAM_SENSOR_BITS_PER_PIXEL)-1)
+    #undef CAM_BLACK_LEVEL
+    #define CAM_BLACK_LEVEL             127
+
+    // pattern
+    //RealRom:FFA99FB4                    ADR     R0, aObRG1G2BLdLdLd ; "\n  OB : (R, G1, G2, B) = (%ld, %ld, %ld"...
+    #define cam_CFAPattern              0x02010100		// Red  Green  Green  Blue
+
+    // color preliminary (see DNG4PS2 wiki)
+    #define CAM_COLORMATRIX1                               \
+      661840,  1000000, -185671, 1000000, -97110,  1000000, \
+      -83661,  1000000, 578860, 1000000,   32308,  1000000, \
+      -8681,    1000000, 70356,   1000000, 207341, 1000000
+
+    //Here is an alternate CAM_COLORMATRIX1 - Current one is nice for me but hey I'm no colour expert.
+    //XYZ -> Camera matrix:
+    //0.459395 -0.129083 -0.068085
+    //-0.055837 0.400827 0.020378
+    //-0.004622 0.048662 0.139970
+
+    #define cam_CalibrationIlluminant1  17			// Standard Light A
+
+	// cropping
+    #define CAM_JPEG_WIDTH              4000
+    #define CAM_JPEG_HEIGHT             3000
+    #define CAM_ACTIVE_AREA_X1          40
+    #define CAM_ACTIVE_AREA_Y1          24
+    #define CAM_ACTIVE_AREA_X2          4056
+    #define CAM_ACTIVE_AREA_Y2          3040
+    // camera name
+    #define PARAM_CAMERA_NAME           4			// parameter number for GetParameterData sd990: OK
+
+//----------------------------------------------------------
+#elif defined (CAMERA_ixus90_sd790)
+    #define CAM_PROPSET                 2
+    #define CAM_DRYOS                   1
+
+    #define CAM_RAW_ROWPIX              3720
+    #define CAM_RAW_ROWS                2772
+
+    #undef CAM_USE_ZOOM_FOR_MF
+    #undef CAM_HAS_ERASE_BUTTON
+    #define CAM_MULTIPART               1
+    #undef CAM_HAS_IRIS_DIAPHRAGM
+    #undef CAM_HAS_MANUAL_FOCUS
+
+    #define CAM_HAS_ND_FILTER           1
+    #undef CAM_HAS_USER_TV_MODES
+    #define CAM_SHOW_OSD_IN_SHOOT_MENU  1
+	 #define CAM_CAN_UNLOCK_OPTICAL_ZOOM_IN_VIDEO 1
+    #define CAM_HAS_JOGDIAL             1
+    #undef CAM_VIDEO_CONTROL
+    #define CAM_EXT_TV_RANGE            1          // CHDK can make exposure time longer than 64s
+
+    #define DNG_SUPPORT                 1
+    // pattern
+    #define cam_CFAPattern 0x02010100 // Red  Green  Green  Blue
+    // color
+    #define CAM_COLORMATRIX1                               \
+      827547, 1000000, -290458, 1000000, -126086, 1000000, \
+     -12829,  1000000, 530507,  1000000, 50537,   1000000, \
+      5181,   1000000, 48183,   1000000, 245014,  1000000
+    #define cam_CalibrationIlluminant1 1 // Daylight
+
+    // cropping 
+    #define CAM_JPEG_WIDTH  3648
+    #define CAM_JPEG_HEIGHT 2736
+    #define CAM_ACTIVE_AREA_X1 6
+    #define CAM_ACTIVE_AREA_Y1 12
+    #define CAM_ACTIVE_AREA_X2 3690
+    #define CAM_ACTIVE_AREA_Y2 2772
+
+    // camera name
+    #define PARAM_CAMERA_NAME 4 // parameter number for GetParameterData
+    #undef  CAM_SENSOR_BITS_PER_PIXEL
+    #undef  CAM_WHITE_LEVEL
+    #undef  CAM_BLACK_LEVEL
+    #define CAM_SENSOR_BITS_PER_PIXEL   12
+    #define CAM_WHITE_LEVEL             ((1<<CAM_SENSOR_BITS_PER_PIXEL)-1)
+    #define CAM_BLACK_LEVEL             127
 
 //==========================================================
 // S-Series
@@ -2026,7 +2217,6 @@
 
     #define CAM_PROPSET                 2
     #define CAM_DRYOS                   1
-    #define  CAM_SWIVEL_SCREEN          1
     #define CAM_RAW_ROWPIX              4080 // from calcs see 100C lib.c 
     #define CAM_RAW_ROWS                3048 //  "     "    "    "    "  
     
@@ -2050,18 +2240,18 @@
     // color
     //need fixing *****************************************************
     #define CAM_COLORMATRIX1                               \
-      827547, 1000000, -290458, 1000000, -126086, 1000000, \
-     -12829,  1000000, 530507,  1000000, 50537,   1000000, \
-      5181,   1000000, 48183,   1000000, 245014,  1000000
+      14134, 1000000, -5576, 1000000, -1527, 1000000, \
+     -1991,  1000000, 10719,  1000000, 1273,   1000000, \
+      -1158,   1000000, 1929,   1000000, 3581,  1000000
 
-    #define cam_CalibrationIlluminant1 1 // Daylight
+    #define cam_CalibrationIlluminant1 17 // Standard Light A
     // cropping
     #define CAM_JPEG_WIDTH  4000
     #define CAM_JPEG_HEIGHT 3000
-    #define CAM_ACTIVE_AREA_X1 6
-    #define CAM_ACTIVE_AREA_Y1 12
-    #define CAM_ACTIVE_AREA_X2 4080
-    #define CAM_ACTIVE_AREA_Y2 3048
+    #define CAM_ACTIVE_AREA_X1 52
+    #define CAM_ACTIVE_AREA_Y1 14
+    #define CAM_ACTIVE_AREA_X2 4052
+    #define CAM_ACTIVE_AREA_Y2 3014
     // camera name
     #define PARAM_CAMERA_NAME 4 // parameter number for GetParameterData
     #undef  CAM_SENSOR_BITS_PER_PIXEL
@@ -2139,10 +2329,75 @@
       
    //end nandoide sept-2009
    #define CAM_QUALITY_OVERRIDE 1
+   #define CAM_AF_SCAN_DURING_VIDEO_RECORD 1
 //----------------------------------------------------------
+#elif defined (CAMERA_g11)
+    #define CAM_DRYOS_2_3_R39			1
+    #define CAM_PROPSET                 3
+    #define CAM_DRYOS                   1
+
+    #define CAM_RAW_ROWPIX              3744   // See g11 lib.c
+    #define CAM_RAW_ROWS                2784   // See g11 lib.c
+    #undef  CAM_EMUL_KEYPRESS_DURATION
+    #define CAM_EMUL_KEYPRESS_DURATION  10
+
+	#define CAM_QUALITY_OVERRIDE 1
+    #define CAM_AF_SCAN_DURING_VIDEO_RECORD 1
+    #define CAM_HAS_JOGDIAL             1
+    #undef  CAM_CONSOLE_LOG_ENABLED         // Development: internal camera stdout -> A/stdout.txt
+    #define CAM_BRACKETING              1
+    #define CAM_MULTIPART               1
+    #define CAM_EXT_TV_RANGE            1
+    #undef OPT_CURVES
+    #undef CAM_UNCACHED_BIT
+    #define CAM_UNCACHED_BIT            0x40000000  // G11 @FF888204(via ExMem.FreeCacheable)
+
+	#define CAM_SWIVEL_SCREEN			1
+	#define CAM_SHOW_OSD_IN_SHOOT_MENU  1
+
+    // camera name
+    #define PARAM_CAMERA_NAME 4 // parameter number for GetParameterData
+    #undef  CAM_SENSOR_BITS_PER_PIXEL
+    #undef  CAM_WHITE_LEVEL
+    #undef  CAM_BLACK_LEVEL
+    #define CAM_SENSOR_BITS_PER_PIXEL   12
+    #define CAM_WHITE_LEVEL             ((1<<CAM_SENSOR_BITS_PER_PIXEL)-1)
+    #define CAM_BLACK_LEVEL             127
+
+    #undef CAM_USES_ASPECT_CORRECTION   
+    #undef CAM_USES_ASPECT_YCORRECTION  
+    #define CAM_USES_ASPECT_CORRECTION  1  //camera uses the modified graphics primitives to map screens an viewports to buffers more sized 
+    #define CAM_USES_ASPECT_YCORRECTION  0  //only uses mappings on x coordinate
+    //games mappings
+	#undef GAMES_SCREEN_WIDTH
+	#undef GAMES_SCREEN_HEIGHT
+	#define GAMES_SCREEN_WIDTH 720	// ERR99CHECK
+	#define GAMES_SCREEN_HEIGHT 240
+
+    #undef CAM_BITMAP_PALETTE
+    #define CAM_BITMAP_PALETTE    4
+   
+
+    #undef ASPECT_XCORRECTION
+	#define ASPECT_XCORRECTION(x)  ( ( ((x)<<3) + (x) )  >>2 )
+	#undef ASPECT_GAMES_XCORRECTION 
+	#define ASPECT_GAMES_XCORRECTION(x)   ( ((x)<<1) )  
+	#undef ASPECT_GAMES_YCORRECTION
+	#define ASPECT_GAMES_YCORRECTION(y)   ( (y) )  //none
+
+    #undef ASPECT_GRID_XCORRECTION
+    #define ASPECT_GRID_XCORRECTION(x)  ( ((x)<<3)/9  )  //grids are designed on a 360x240 basis and screen is 320x240, we need x*320/360=x*8/9
+    #undef ASPECT_GRID_YCORRECTION
+    #define ASPECT_GRID_YCORRECTION(y)  ( (y) )       //y correction for grids  made on a 360x240 As the buffer is 720x240 we have no correction here.
+
+    #undef ASPECT_VIEWPORT_XCORRECTION 
+    #define ASPECT_VIEWPORT_XCORRECTION(x) ASPECT_GRID_XCORRECTION(x) //viewport is 360x240 and screen 320x240, we need x*320/360=x*8/9, equal than grids, used by edgeoverlay
+    #undef ASPECT_VIEWPORT_YCORRECTION 
+    #define ASPECT_VIEWPORT_YCORRECTION(y) ( (y) ) 
+    #undef EDGE_HMARGIN 
+    #define EDGE_HMARGIN 20
 #else
     #error camera type not defined
-
 #endif
 
 // curves only work in 10bpp for now

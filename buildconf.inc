@@ -11,11 +11,19 @@ OPT_CALENDAR=1
 OPT_DEBUGGING=1
 OPT_EDGEOVERLAY=1
 OPT_LUA_STRLIB=1
+#allow Lua to call arbitrary ROM functions and eventprocs
+# WARNING: This is DANGEROUS. e.g. call_event_proc("EraseSectorOfRom",...)
+# NOTE: the interface for this may change in the future, to support better support buffers etc
+#OPT_LUA_CALL_NATIVE=1
 #OPT_MD_DEBUG=1
 # needs proper fi2.inc in platform/ !!! see http://chdk.setepontos.com/index.php/topic,2995.0.html
 OPT_FI2=1
 # if enabled, compiler will produce a lot of warnings, maybe not always correct ones, see http://chdk.setepontos.com/index.php/topic,2509.msg32191.html#msg32191
 #OPT_WARNINGS=1
+# If enabled (and reference binaries are present in /tools), compiler will generate function signatures
+OPT_GEN_SIGS=1
+# If enabled (and firmware binaries are present) compiler will update "stubs_entry.S"
+OPT_GEN_STUBS=1
 # Shall ubasic be compiled into build? not done yet
 #!OPT_UBASIC=1
 # Shall lua support be compiled into build? not done yet

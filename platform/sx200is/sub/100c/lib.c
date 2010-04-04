@@ -39,7 +39,7 @@ long hook_raw_size()
 void *vid_get_viewport_live_fb()
 {
     void **fb=(void **)0x2180;                               // 0x2150 or 0x2180 (suggested by ADamb)
-    unsigned char buff = *((unsigned char*)0xF1D8);          // found at FF838090
+    unsigned char buff = *((unsigned char*)0x1FD8);          // found at FF838090
     if (buff == 0) buff = 2;  else buff--;    
     return fb[buff];
 }
@@ -59,7 +59,8 @@ void *vid_get_viewport_fb()
 // Histo etc. when in play mode maybe ?
 void *vid_get_viewport_fb_d() 
 {
-	return (void*)(*(int*)(0x2950+0x50));                  // found at FF858A84 and FF859398 (0x58 at FF8594F0)
+//	return (void*)(*(int*)(0x2950+0x50));                  // found at FF858A84 and FF859398 (0x58 at FF8594F0)
+	return (void*)(*(int*)(0x2950+0x58));                  // suggested by ADamb
 }
 
 

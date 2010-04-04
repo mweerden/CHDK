@@ -24,6 +24,8 @@
 #define ISO_MAX (iso_table[ISO_SIZE-1].id)
 #define ISO_MIN_VALUE (iso_table[1-iso_table[0].id].prop_id)
 
+static const unsigned MODESCNT=(sizeof(modemap)/sizeof(modemap[0]));
+
 /*define PROPCASE_CONT_MODE_SHOOT_COUNT 		218*/
 static short iso_market_base=0;
 //static short iso_base=0;
@@ -413,7 +415,7 @@ int shooting_get_exif_subject_dist()
 
 int shooting_get_lens_to_focal_plane_width()
 {
-	return (int)(lens_get_focus_pos()-lens_get_focus_pos_from_lense());
+	return (int)(lens_get_focus_pos()-lens_get_focus_pos_from_lens());
 }
 
 int shooting_get_hyperfocal_distance_()
@@ -728,7 +730,7 @@ short shooting_get_drive_mode()
     short m;
 // reyalp - this is related to http://chdk.setepontos.com/index.php/topic,3994.405.html
 // TODO
-#if defined (CAMERA_sx200is)
+#if defined (CAMERA_sx200is) || defined (CAMERA_g11) || defined (CAMERA_ixus100_sd780) || defined (CAMERA_a480)
    short n;
    // unlike other cameras, sx200 does set PROPCASE_DRIVE_MODE when in custom timer mode
    // SX 200 IS 0,1,2,3,4=Off, 2 Second, Custom, Face Detection
@@ -745,6 +747,7 @@ short shooting_get_drive_mode()
     return m;
 }
 
+// TODO this should probably use MODE_IS_VIDEO
 short shooting_can_focus()
 {
 #if !CAM_CAN_SD_OVER_NOT_IN_MF && CAM_CAN_SD_OVERRIDE
@@ -767,7 +770,8 @@ short shooting_can_focus()
   return mode_video;
 #elif defined (CAMERA_ixus800_sd700)                				   
  int m=mode_get()&MODE_SHOOTING_MASK;
-  return (shooting_get_zoom()<8) && (m!=MODE_AUTO) && (m!=MODE_SCN_WATER);
+// TODO whats the reason for this ?!?
+  return (shooting_get_zoom()<8) && (m!=MODE_AUTO) && (m!=MODE_SCN_UNDERWATER);
 #else 
   return 1;  
 #endif 			  
@@ -985,6 +989,7 @@ void shooting_set_autoiso(int iso_mode) {
 			return;
 	}
 	int m=mode_get()&MODE_SHOOTING_MASK;
+	// TODO also long shutter ?
 	if (m==MODE_M || m==MODE_TV || m==MODE_STITCH) return; //Only operate outside of M and Tv
 	static const short shutter[]={0, 8, 15, 30, 60, 125, 250, 500, 1000};
 	float current_shutter = shooting_get_shutter_speed_from_tv96(shooting_get_tv96());
@@ -1101,12 +1106,8 @@ void shooting_tv_bracketing(){
     }
     // Tv override is disabled, use camera's opinion of Tv for bracketing seed value.
     else {
-      #if defined (CAMERA_tx1) // M mode is actually automatic on the tx1.
-      bracketing.tv96=shooting_get_tv96();
-      #else
-      if (!(m==MODE_M || m==MODE_TV)) bracketing.tv96=shooting_get_tv96(); 
+      if (!(m==MODE_M || m==MODE_TV || m==MODE_LONG_SHUTTER)) bracketing.tv96=shooting_get_tv96(); 
       else bracketing.tv96=shooting_get_user_tv96();
-      #endif
     }
     bracketing.tv96_step=32*conf.tv_bracket_value;
   }
@@ -1381,3 +1382,60 @@ void set_ev_video(int x){
 }
 
 #endif
+
+int shooting_mode_canon2chdk(int canonmode) {
+	int i;
+	for (i=0; i < MODESCNT; i++) {
+		if (modemap[i].canonmode == canonmode) 
+			return modemap[i].hackmode;
+	}
+	return 0;
+}
+
+int shooting_mode_chdk2canon(int hackmode) {
+	int i;
+	for (i=0; i < MODESCNT; i++) {
+		if (modemap[i].hackmode == hackmode) 
+			return modemap[i].canonmode;
+	}
+	return -1; // 0 is a valid mode on old cameras!
+}
+
+int shooting_set_mode_chdk(int mode) {
+	int canonmode = shooting_mode_chdk2canon(mode);
+	if (canonmode == -1 || !rec_mode_active())
+		return 0;
+	_SetCurrentCaptureModeType(canonmode);
+	// TODO since mode seems to be fully set when this returns,
+	// we could check if it worked
+	return 1;
+}
+
+int shooting_set_mode_canon(int canonmode) {
+	if(canonmode == -1 || !rec_mode_active())
+		return 0;
+	_SetCurrentCaptureModeType(canonmode);
+	return 1;
+}
+
+// override in platform/<cam>/main.c if playrec_mode is not found or different
+int __attribute__((weak)) rec_mode_active(void) {
+    return (playrec_mode==2 || playrec_mode==4 || playrec_mode==5);
+}
+
+// currently nothing needs to override this, so not weak
+int /*__attribute__((weak))*/ mode_get(void) {
+    int mode, t=0xFF;
+
+    mode = (rec_mode_active())?MODE_REC:MODE_PLAY;
+
+#ifdef CAM_SWIVEL_SCREEN
+    mode |= (screen_opened())?MODE_SCREEN_OPENED:0;
+    mode |= (screen_rotated())?MODE_SCREEN_ROTATED:0;
+#endif
+
+    _GetPropertyCase(PROPCASE_SHOOTING_MODE, &t, 4);
+	mode |= shooting_mode_canon2chdk(t);
+
+    return (mode);
+}

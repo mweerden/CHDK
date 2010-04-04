@@ -83,7 +83,6 @@ void remount_filesystem()
     _Mount_FileSystem();
 }
 
-
 void mark_filesystem_bootable()
 {
     _UpdateMBROnFlash(0, 0x40, "BOOTDISK");
@@ -131,6 +130,7 @@ void lens_set_zoom_point(long newpt)
     if (newpt==0) zoom_status=ZOOM_OPTICAL_MIN;
     else if (newpt >= zoom_points) zoom_status=ZOOM_OPTICAL_MAX;
     else zoom_status=ZOOM_OPTICAL_MEDIUM; 
+    _SetPropertyCase(PROPCASE_OPTICAL_ZOOM_POSITION, &newpt, sizeof(newpt));
 }
 
 void lens_set_zoom_speed(long newspd)
@@ -207,6 +207,9 @@ long t;
 }*/
 int open (const char *name, int flags, int mode )
 {
+#ifdef CAM_DRYOS_2_3_R39
+    if(name[0]!='A')return -1;
+#endif
     return _Open(name, flags, mode);
 }
 int close (int fd)
@@ -337,6 +340,14 @@ long strtol(const char *nptr, char **endptr, int base) {
     return _strtol(nptr, endptr, base);
 }
 
+unsigned long strtoul(const char *nptr, char **endptr, int base) {
+#if CAM_DRYOS
+    return (unsigned long)_strtolx(nptr, endptr, base, 0);
+#else
+    return _strtoul(nptr, endptr, base);
+#endif
+}
+
 char *strpbrk(const char *s, const char *accept) {
 #if !CAM_DRYOS
     return _strpbrk(s, accept);
@@ -398,15 +409,23 @@ int utime(char *file, void *newTimes) {
 #if !CAM_DRYOS
   return _utime(file, newTimes);
 #else
- int fd;
  int res=0;
+ int fd;
  fd = _open(file, 0, 0);
- if (fd>=0) {
-  res=_SetFileTimeStamp(fd, ((int*)newTimes)[0] , ((int*)newTimes)[1]);
-  _close(fd);
- }
- // return value compatibe with utime: ok=0 fail=-1
- return (res)?0:-1;
+
+#ifdef CAM_DRYOS_2_3_R39
+   if (fd>=0) {
+       _close(fd);
+       res=_SetFileTimeStamp(file, ((int*)newTimes)[0] , ((int*)newTimes)[1]);
+   }
+#else
+     if (fd>=0) {
+      res=_SetFileTimeStamp(fd, ((int*)newTimes)[0] , ((int*)newTimes)[1]);
+      _close(fd);
+     }
+     // return value compatibe with utime: ok=0 fail=-1
+#endif
+  return (res)?0:-1;
 #endif
 }
 
@@ -793,63 +812,6 @@ long __attribute__((weak)) get_jogdial_direction(void){
  return 0;
 }
 
-void reverse_bytes_order(char* start, int count){
-// note, we will go to count rounded up to the nearest 32
-asm volatile(
-	"ldr	r2, =0xFF00FF\n"	// r2 = mask
-	"add	r1, r0, r1\n"		// r1 = start + count
-"LOOP:\n"
-	"ldm	r0, {R4-R11}\n"		// load 8 words
-	
-	// out = ((in>>8) & 0xFF00FF) | ((in&0xFF00FF) << 8);
-	"mov	r3, r4, lsr #8\n"	// r3 = in >> 8
-	"and	r3, r3, r2\n"		// r3 &= 0xFF00FF
-	"and	r4, r4, r2\n"		// r4 = in & 0xFF00FF
-	"orr	r4, r3, r4, asl #8\n" // out = r3 | (r4 << 8)
-
-	"mov	r3, r5, lsr #8\n"
-	"and	r3, r3, r2\n"
-	"and	r5, r5, r2\n"
-	"orr	r5, r3, r5, asl #8\n"
-
-	"mov	r3, r6, lsr #8\n"
-	"and	r3, r3, r2\n"
-	"and	r6, r6, r2\n"
-	"orr	r6, r3, r6, asl #8\n"
-
-	"mov	r3, r7, lsr #8\n"
-	"and	r3, r3, r2\n"
-	"and	r7, r7, r2\n"
-	"orr	r7, r3, r7, asl #8\n"
-
-	"mov	r3, r8, lsr #8\n"
-	"and	r3, r3, r2\n"
-	"and	r8, r8, r2\n"
-	"orr	r8, r3, r8, asl #8\n"
-
-	"mov	r3, r9, lsr #8\n"
-	"and	r3, r3, r2\n"
-	"and	r9, r9, r2\n"
-	"orr	r9, r3, r9, asl #8\n"
-
-	"mov	r3, r10, lsr #8\n"
-	"and	r3, r3, r2\n"
-	"and	r10, r10, r2\n"
-	"orr	r10, r3, r10, asl #8\n"
-
-	"mov	r3, r11, lsr #8\n"
-	"and	r3, r3, r2\n"
-	"and	r11, r11, r2\n"
-	"orr	r11, r3, r11, asl #8\n"
-
-	"stmia	r0!, {r4-r11}\n"	// store and increment
-
-	"cmp	r0, r1\n"
-	"bcc	LOOP\n"
-	:::"r0","r1","r2","r3","r4","r5","r6","r7","r8","r9","r10","r11"
- );
-}
-
 #if defined (DNG_EXT_FROM)
 
 #define DNG_EXT_TO ".DNG"
@@ -927,11 +889,40 @@ void drv_self_unhide(){
 
 int  apex2us(int apex_tv){
 #if CAM_EXT_TV_RANGE
- if (apex_tv<-576) return 1000000.0*pow(2.0, -apex_tv/96.0);
- else return _apex2us(apex_tv);
+/*
+ Extended Tv, by barberofcivil, http://chdk.setepontos.com/index.php/topic,4392.0.html
+ Explanation by reyalP:
+ In every port, the original shutter overrides (as opposed to super long exposure) worked by
+ setting the propcase values at some point after auto-exposure has happened (except in manual
+ modes, where the manual control propcases may be used instead). The Canon code previously took
+ these values unchanged for short exposures. In newer cameras, like on the SX10 / SD980, the value
+ is changed, apparently some time after it has been retrieved from the propcase. We know this is
+ the case, because the propcase value itself doesn't get clamped to the allowed range (if it did,
+ barberofcivil's code wouldn't work).
+*/
+	short tv;
+	tv = shooting_get_tv96();
+	if (tv<-576 || tv!=apex_tv) return 1000000.0*pow(2.0, -tv/96.0);
+	else return _apex2us(apex_tv);
 #else
- return 0;
+	return 0;
 #endif
+}
+
+void PostLogicalEventForNotPowerType(unsigned id, unsigned x) {
+	_PostLogicalEventForNotPowerType(id,x);
+}
+
+void PostLogicalEventToUI(unsigned id, unsigned x) {
+	_PostLogicalEventToUI(id,x);
+}
+
+void SetLogicalEventActive(unsigned id, unsigned state) {
+	_SetLogicalEventActive(id, state);
+}
+
+void SetScriptMode(unsigned mode) {
+	_SetScriptMode(mode);
 }
 
 // TODO this belongs lib.c, but not all cameras include it
@@ -947,6 +938,15 @@ void __attribute__((weak)) vid_turn_off_updates()
 void __attribute__((weak)) vid_turn_on_updates()
 {
 }
+
+// use _GetFocusLensSubjectDistance for this on dryos, vx functions are basically equivlent
+// not used in CHDK currently for either OS
+#ifdef CAM_DRYOS
+long __attribute__((weak)) _GetCurrentTargetDistance()
+{
+	return _GetFocusLensSubjectDistance();
+}
+#endif
 
 int add_ptp_handler(int opcode, ptp_handler handler, int unknown)
 {

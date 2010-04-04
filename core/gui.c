@@ -106,6 +106,9 @@ int script_params_has_changed=0;
 //Alt mode & Manual mode  
  #define SHORTCUT_SET_INFINITY        KEY_UP
  #define SHORTCUT_SET_HYPERFOCAL      KEY_DOWN
+ #ifndef CAM_HAS_MANUAL_FOCUS
+ 	#define SHORTCUT_MF_TOGGLE           KEY_DISPLAY
+ #endif
 #endif
 
 
@@ -377,9 +380,9 @@ static CMenu reader_submenu = {0x37,LANG_MENU_READ_TITLE, NULL, reader_submenu_i
 #ifdef OPT_DEBUGGING
 static CMenuItem debug_submenu_items[] = {
     {0x5c,LANG_MENU_DEBUG_DISPLAY,           MENUITEM_ENUM,          (int*)gui_debug_display_enum },
-    {0x2a,LANG_MENU_DEBUG_PROPCASE_PAGE,     MENUITEM_INT|MENUITEM_F_UNSIGNED|MENUITEM_F_MINMAX,   &debug_propcase_page, MENU_MINMAX(0, 128) },
+    {0x2a,LANG_MENU_DEBUG_PROPCASE_PAGE,     MENUITEM_INT|MENUITEM_F_UNSIGNED|MENUITEM_F_MINMAX,   &conf.debug_propcase_page, MENU_MINMAX(0, 128) },
     {0x2a,LANG_MENU_DEBUG_TASKLIST_START,    MENUITEM_INT|MENUITEM_F_UNSIGNED|MENUITEM_F_MINMAX,   &debug_tasklist_start, MENU_MINMAX(0, 63) },
-    {0x5c,LANG_MENU_DEBUG_SHOW_MISC_VALS,    MENUITEM_BOOL,          &debug_vals_show },
+    {0x5c,LANG_MENU_DEBUG_SHOW_MISC_VALS,    MENUITEM_BOOL,          &conf.debug_misc_vals_show },
     {0x2a,LANG_MENU_DEBUG_MEMORY_BROWSER,    MENUITEM_PROC,          (int*)gui_draw_debug },
     {0x2a,LANG_MENU_DEBUG_BENCHMARK,         MENUITEM_PROC,          (int*)gui_draw_bench },
     {0x5c,LANG_MENU_DEBUG_SHORTCUT_ACTION,   MENUITEM_ENUM,          (int*)gui_debug_shortcut_enum },
@@ -1109,7 +1112,7 @@ const char* gui_histo_layout_enum(int change, int arg) {
 
 //-------------------------------------------------------------------
 const char* gui_font_enum(int change, int arg) {
-    static const char* fonts[]={ "Win1250", "Win1251", "Win1252", "Win1254", "Win1257"};
+    static const char* fonts[]={ "Win1250", "Win1251", "Win1252", "Win1253", "Win1254", "Win1257"};
 
     conf.font_cp+=change;
     if (conf.font_cp<0)
@@ -1961,9 +1964,9 @@ static void gui_debug_shortcut(void) {
                     debug_tasklist_start = 0;
             }
             else if (conf.debug_display == DEBUG_DISPLAY_PROPS || conf.debug_display == DEBUG_DISPLAY_PARAMS) {
-                debug_propcase_page += debug_display_direction*1;
-                if(debug_propcase_page > 128 || debug_propcase_page < 0) 
-                    debug_propcase_page = 0;
+                conf.debug_propcase_page += debug_display_direction*1;
+                if(conf.debug_propcase_page > 128 || conf.debug_propcase_page < 0) 
+                    conf.debug_propcase_page = 0;
             }
         break;
         case 3:
@@ -2560,7 +2563,11 @@ void other_kbd_process(){
   #if CAM_HAS_ERASE_BUTTON
   if (kbd_is_key_clicked(KEY_ERASE)){ 
   #else
+  #if !defined (CAMERA_a480)
   if (kbd_is_key_clicked(KEY_DISPLAY)){ 
+  #else
+  if (kbd_is_key_clicked(KEY_MENU)){ 
+  #endif
   #endif
    set_ev_video_avail(!get_ev_video_avail()); 
   }
@@ -2578,7 +2585,7 @@ void other_kbd_process(){
 
 void gui_draw_debug_vals_osd() {
 #ifdef OPT_DEBUGGING
-    if (debug_vals_show) {
+    if (conf.debug_misc_vals_show) {
         //        long v=get_file_counter();
         //	sprintf(osd_buf, "1:%03d-%04d  ", (v>>18)&0x3FF, (v>>4)&0x3FFF);
         //	sprintf(osd_buf, "1:%d, %08X  ", xxxx, eeee);
@@ -2660,7 +2667,7 @@ void gui_draw_debug_vals_osd() {
 
             for (i=0;i<10;i++){
                 r = 0;
-                p = debug_propcase_page*10+i;
+                p = conf.debug_propcase_page*10+i;
                 get_property_case(p, &r, 4);
                 sprintf(sbuf, "%3d: %d              ", p, r);
                 sbuf[20]=0;
@@ -2675,7 +2682,7 @@ void gui_draw_debug_vals_osd() {
 
             for (i=0;i<10;i++){
                 r = 0;
-                p = debug_propcase_page*10+i;
+                p = conf.debug_propcase_page*10+i;
                 if (p>=get_flash_params_count()) {
                     sprintf(sbuf, "%3d: This parameter does not exists", p);
                 } else  {
@@ -2705,7 +2712,7 @@ void gui_draw_debug_vals_osd() {
 //extern int xxxx, eeee;
 //-------------------------------------------------------------------
 void gui_draw_osd() {
-    unsigned int m, n = 0, mode_photo, mode_video;
+    unsigned int m, /*n = 0,*/ mode_photo, mode_video;
     coord x;
 #if CAM_SWIVEL_SCREEN
     static int flashlight = 0;

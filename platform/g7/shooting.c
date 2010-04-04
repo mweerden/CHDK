@@ -76,6 +76,54 @@ const ISOTable iso_table[] = {
     {  6, 1600, "1600", -1},
 };          
 
+/*
+http://www.usa.canon.com/consumer/controller?act=ModelInfoAct&tabact=ModelTechSpecsTabAct&fcategoryid=222&modelid=14321
+
+Shooting Modes
+	Auto, P, Av, Tv, M, C1, C2,
+	Special Scene 
+		Portrait, Landscape, Night Scene, Sports, Foliage, Snow, Beach, Fireworks, Aquarium
+		Underwater, ISO 3200, Indoor, Kids & Pets, Night Snapshot, Color Accent, Color Swap
+	Stitch Assist, Movie
+
+video resolutions
+1,024 x 768 (15 fps), 640 x 480 / 320 x 240 (30 fps/15 fps) available up to 4GB, 160 x 120 (3 min. at 15 fps)
+
+canon mode list FF9B62B0 in 100e
+*/
+static const CapturemodeMap modemap[] = {
+    { MODE_AUTO,               32768 },
+    { MODE_P,                  32772 },
+    { MODE_TV,                 32771 },
+    { MODE_AV,                 32770 },
+    { MODE_M,                  32769 },
+    { MODE_VIDEO_STD,          2596  },
+    { MODE_VIDEO_HIRES,        2599  },
+    { MODE_VIDEO_COMPACT,      2598  },
+    { MODE_VIDEO_MY_COLORS,    2595  },
+    { MODE_VIDEO_COLOR_ACCENT, 2594  },
+    { MODE_STITCH,             33290 },
+    { MODE_MY_COLORS,          16922 },
+    { MODE_SCN_UNDERWATER,     16405 },
+    { MODE_SCN_AQUARIUM,       16406 },
+    { MODE_SCN_NIGHT_SNAPSHOT, 16395 }, // not sure which of these is which
+    { MODE_SCN_NIGHT_SCENE,    16398 },
+    { MODE_SCN_KIDS_PETS,      16399 },
+    { MODE_SCN_INDOOR,         16400 },
+    { MODE_SCN_FOLIAGE,        16401 },
+    { MODE_SCN_SNOW,           16402 },
+    { MODE_SCN_BEACH,          16403 },
+    { MODE_SCN_FIREWORK,       16404 },
+    { MODE_SCN_ISO_3200,       16411 },
+    { MODE_SCN_PORTRAIT,       16397 },
+    { MODE_SCN_LANDSCAPE,      16396 },
+    { MODE_SCN_SPORT,          16903 },
+    { MODE_SCN_COLOR_ACCENT,   16921 }
+// from canon mode list, probably C1, C2
+//    { ???,          8222 },
+//    { ???,   8223 }
+};
+
 #include "../generic/shooting.c"
 
 long get_file_next_counter() {

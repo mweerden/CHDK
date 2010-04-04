@@ -77,6 +77,44 @@ const ISOTable iso_table[] = {
     {  6, 1600, "1600", -1},
 };          
 
+/*
+http://www.usa.canon.com/consumer/controller?act=ModelInfoAct&tabact=ModelTechSpecsTabAct&fcategoryid=221&modelid=14905
+
+Shooting Modes
+	Auto; Creative: P, Av, Tv, M; Image: Portrait, Landscape,
+    Special Scene
+        (Night Scene, Foliage, Snow, Beach, Fireworks, Aquarium, Underwater),
+    Indoor, Kids & Pets, Night Snapshot, Stitch Assist, Movie
+Movie: 640 x 480 / 320 x 240 (30 fps/15 fps) available up to 4GB or 60 minutes,
+    320 x 240 (1 min. at 60 fps), 160 x 120 (3 min. at 15 fps)
+
+canon mode list FFEE5E94 in 100e
+*/
+
+static const CapturemodeMap modemap[] = {
+    { MODE_AUTO,               32768 },
+    { MODE_P,                  32772 },
+    { MODE_TV,                 32771 },
+    { MODE_AV,                 32770 },
+    { MODE_M,                  32769 },
+    { MODE_VIDEO_STD,          2597  },
+    { MODE_VIDEO_SPEED,        2598  },
+    { MODE_VIDEO_COMPACT,      2599  },
+    { MODE_STITCH,             33290 },
+    { MODE_SCN_UNDERWATER,     16406 },
+    { MODE_SCN_AQUARIUM,       16407 },
+    { MODE_SCN_NIGHT_SCENE,    16398 },
+    { MODE_SCN_FOLIAGE,        16402 },
+    { MODE_SCN_SNOW,           16403 },
+    { MODE_SCN_BEACH,          16404 },
+    { MODE_SCN_FIREWORK,       16405 },
+    { MODE_INDOOR,             32785 },
+    { MODE_KIDS_PETS,          32784 },	
+    { MODE_NIGHT_SNAPSHOT,     32779 },
+    { MODE_LANDSCAPE,          32780 },	
+    { MODE_PORTRAIT,           32781 },
+};
+
 #include "../generic/shooting.c"
 
 

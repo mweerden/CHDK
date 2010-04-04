@@ -56,7 +56,7 @@ static int step;
 // Only top and bottom are restored, not left&right.
 #define ZEBRA_CANONOSD_BORDER_RESTORE   1
 
-#if defined (CAMERA_sx200is)
+#if defined (CAMERA_sx200is) || defined(CAMERA_g11) || defined (CAMERA_ixus100_sd780)
   //there are no memory for that (the screen buffer is big): 960x270
   //TODO use a buffer of screen dimensions
   #define ZFIX_TOP    1
@@ -75,7 +75,7 @@ static unsigned char *cur_buf;
 static int cur_buf_size;
 static int timer = 0;
 static unsigned char *buf = NULL;
-#if defined (CAMERA_sx200is)
+#if defined (CAMERA_sx200is) || defined(CAMERA_g11) || defined (CAMERA_ixus100_sd780)
 static int buffer_size;
 #endif
 
@@ -85,6 +85,7 @@ static EXPO_TYPE expo;
 #define OSD_STATE    0
 #define OSD_MISC     1
 
+unsigned char clip8(signed short x){ if (x<0) x=0; else if (x>255) x=255; return x; }
 
 //-------------------------------------------------------------------
 void gui_osd_init() {
@@ -173,13 +174,13 @@ static void gui_osd_draw_single_histo(int hist, coord x, coord y, int small) {
 
     switch (hist) {
         case HISTO_R: 
-            cl=COLOR_RED; 
+            cl=((mode_get()&MODE_MASK) == MODE_REC)?COLOR_HISTO_R:COLOR_HISTO_R_PLAY;
             break;
         case HISTO_G: 
-            cl=COLOR_GREEN; 
+            cl=((mode_get()&MODE_MASK) == MODE_REC)?COLOR_HISTO_G:COLOR_HISTO_G_PLAY;
             break;
-        case HISTO_B: 
-            cl=((mode_get()&MODE_MASK) == MODE_REC)?0xDF:0xCC; 
+        case HISTO_B:
+            cl=((mode_get()&MODE_MASK) == MODE_REC)?COLOR_HISTO_B:COLOR_HISTO_B_PLAY;
             break;
         case HISTO_RGB:
         case HISTO_Y:
@@ -239,7 +240,7 @@ static int gui_osd_zebra_init(int show) {
     if(show) { 
         if (!buf) {
             timer = 0;
-            #if defined (CAMERA_sx200is) //nandoide sept-2009
+            #if defined (CAMERA_sx200is) || defined (CAMERA_g11) || defined (CAMERA_ixus100_sd780) //nandoide sept-2009
                buffer_size=screen_buffer_size-ZEBRA_HMARGIN0*screen_buffer_width;
                buf = malloc(buffer_size);
                //~ if (!buf) draw_txt_string(0, 14, "Warn: No space to allocate zebra buffer: restart camera", MAKE_COLOR(COLOR_ALT_BG, COLOR_FG));
@@ -253,6 +254,10 @@ static int gui_osd_zebra_init(int show) {
 #if ZEBRA_CANONOSD_BORDER_RESTORE
             cur_buf_top = malloc(screen_buffer_width * ZFIX_TOP); 
             cur_buf_bot = malloc(screen_buffer_width * ZFIX_BOTTOM); 
+#if defined (CAMERA_g11)		
+            if (cur_buf_top) memset(cur_buf_top,0,screen_buffer_width * ZFIX_TOP);
+            if (cur_buf_bot) memset(cur_buf_bot,0,screen_buffer_width * ZFIX_BOTTOM);
+#endif
 #else
             cur_buf = malloc(screen_buffer_size);
 #endif      
@@ -366,7 +371,7 @@ static void gui_osd_draw_zebra_osd() {
 
 // reyalp - TODO this SHOULD NOT BE CAMERA SPECIFIC. Should be generalized to work with all cameras
 // having a copy/paste/modified version for individual cameras will be a maintenance nightmare.
-#if defined (CAMERA_sx200is)
+#if defined (CAMERA_sx200is) || defined (CAMERA_g11) || defined (CAMERA_ixus100_sd780)
 //nandoide sept-2009 
 // viewport is 360x240 and screen buffer 960x270, we need to expand the x coordinate
 int gui_osd_draw_zebra(int show) {
@@ -379,12 +384,12 @@ int gui_osd_draw_zebra(int show) {
     int zebra_drawn=0;
     color cls[] = {
         COLOR_TRANSPARENT,
-        (mrec)?0xDF:0xCC,
-        COLOR_GREEN,
-        (mrec)?COLOR_BLUE_LT:0x99,
-        COLOR_RED,
-        (mrec)?0x66:0xE2,
-        (mrec)?COLOR_YELLOW:0x66,
+        (mrec)?COLOR_HISTO_B:COLOR_HISTO_B_PLAY,
+        (mrec)?COLOR_HISTO_G:COLOR_HISTO_G_PLAY,
+        (mrec)?COLOR_HISTO_BG:COLOR_HISTO_BG_PLAY,
+        (mrec)?COLOR_HISTO_R:COLOR_HISTO_R_PLAY,
+        (mrec)?COLOR_HISTO_RB:COLOR_HISTO_RB_PLAY,
+        (mrec)?COLOR_HISTO_RG:COLOR_HISTO_RG_PLAY,
         COLOR_BLACK
     };
 	
@@ -457,9 +462,9 @@ int gui_osd_draw_zebra(int show) {
                         vv = (signed char)img_buf[v+2];
                         sel=0;
                         if (!((conf.zebra_mode == ZEBRA_MODE_ZEBRA_1 || conf.zebra_mode == ZEBRA_MODE_ZEBRA_2) && (y-x-timer)&f)) {
-                            if (((yy<<12) +           vv*5743 + 2048)>>12>over) sel  = 4; // R
-                            if (((yy<<12) - uu*1411 - vv*2925 + 2048)>>12>over) sel |= 2; // G
-                            if (((yy<<12) + uu*7258           + 2048)>>12>over) sel |= 1; // B
+                            if (clip8(((yy<<12) +           vv*5743 + 2048)>>12)>over) sel  = 4; // R
+                            if (clip8(((yy<<12) - uu*1411 - vv*2925 + 2048)>>12)>over) sel |= 2; // G
+                            if (clip8(((yy<<12) + uu*7258           + 2048)>>12)>over) sel |= 1; // B
                         }
                         buf[s]=buf[s+1]=cls[sel];
                         buf[s+2]=buf[s+3]=cls[sel];
@@ -540,12 +545,12 @@ int gui_osd_draw_zebra(int show) {
     int zebra_drawn=0;
     color cls[] = {
         COLOR_TRANSPARENT,
-        (mrec)?0xDF:0xCC,
-        COLOR_GREEN,
-        (mrec)?COLOR_BLUE_LT:0x99,
-        COLOR_RED,
-        (mrec)?0x66:0xE2,
-        (mrec)?COLOR_YELLOW:0x66,
+        (mrec)?COLOR_HISTO_B:COLOR_HISTO_B_PLAY,
+        (mrec)?COLOR_HISTO_G:COLOR_HISTO_G_PLAY,
+        (mrec)?COLOR_HISTO_BG:COLOR_HISTO_BG_PLAY,
+        (mrec)?COLOR_HISTO_R:COLOR_HISTO_R_PLAY,
+        (mrec)?COLOR_HISTO_RB:COLOR_HISTO_RB_PLAY,
+        (mrec)?COLOR_HISTO_RG:COLOR_HISTO_RG_PLAY,
         COLOR_BLACK
     };
 	
@@ -645,9 +650,9 @@ int gui_osd_draw_zebra(int show) {
                         vv = (signed char)img_buf[v+2];
                         sel=0;
                         if (!((conf.zebra_mode == ZEBRA_MODE_ZEBRA_1 || conf.zebra_mode == ZEBRA_MODE_ZEBRA_2) && (y-x-timer)&f)) {
-                            if (((yy<<12) +           vv*5743 + 2048)>>12>over) sel  = 4; // R
-                            if (((yy<<12) - uu*1411 - vv*2925 + 2048)>>12>over) sel |= 2; // G
-                            if (((yy<<12) + uu*7258           + 2048)>>12>over) sel |= 1; // B
+                            if (clip8(((yy<<12) +           vv*5743 + 2048)>>12)>over) sel  = 4; // R
+                            if (clip8(((yy<<12) - uu*1411 - vv*2925 + 2048)>>12)>over) sel |= 2; // G
+                            if (clip8(((yy<<12) + uu*7258           + 2048)>>12)>over) sel |= 1; // B
                         }
                         buf[s]=buf[s+1]=cls[sel];
                     }
@@ -725,12 +730,12 @@ static void gui_osd_draw_blended_histo(coord x, coord y) {
     int m = ((mode_get()&MODE_MASK) == MODE_REC);
     color cls[] = {
         conf.histo_color>>8,
-        (m)?0xDF:0xCC,
-        COLOR_GREEN,
-        (m)?COLOR_BLUE_LT:0x99,
-        COLOR_RED,
-        (m)?0x66:0xE2,
-        (m)?COLOR_YELLOW:0x66,
+        (m)?COLOR_HISTO_B:COLOR_HISTO_B_PLAY,
+        (m)?COLOR_HISTO_G:COLOR_HISTO_G_PLAY,
+        (m)?COLOR_HISTO_BG:COLOR_HISTO_BG_PLAY,
+        (m)?COLOR_HISTO_R:COLOR_HISTO_R_PLAY,
+        (m)?COLOR_HISTO_RB:COLOR_HISTO_RB_PLAY,
+        (m)?COLOR_HISTO_RG:COLOR_HISTO_RG_PLAY,
         COLOR_WHITE
     };
 

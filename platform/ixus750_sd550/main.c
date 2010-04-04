@@ -33,37 +33,9 @@ int get_zoom_x(int zp) {
     else return fl_tbl[zp]*10/fl_tbl[0];
 }
 
-static struct {
-	int hackmode;
-	int canonmode;
-} modemap[] = {
-    { MODE_DIGITAL_MACRO,	2 },
-    { MODE_MY_COLORS,           3 },
-    { MODE_STITCH,             	4 },
-    { MODE_AUTO,                5 },
-    { MODE_SCN_PORTRAIT,        6 },
-    { MODE_SCN_FOLIAGE,         7 },
-    { MODE_SCN_SNOW,            8 },
-    { MODE_SCN_BEACH,           9 },
-    { MODE_SCN_WATER,          10 },
-    { MODE_SCN_INDOOR,         11 },
-    { MODE_SCN_NIGHT,          12 },
-    { MODE_SCN_CHILD,          13 },
-    { MODE_SCN_FIREWORK,       14 }, 
-    { MODE_VIDEO_STD,          15 }
-};
-
-#define MODESCNT (sizeof(modemap)/sizeof(modemap[0]))
-
-int mode_get() {
-    int mode, i, t=0xFF;
-    mode  = (physw_status[1]&0x0F)==0x0B ?  MODE_PLAY : MODE_REC;
-    t=0xFF;
-    _GetPropertyCase(PROPCASE_SHOOTING_MODE, &t, 4);
-    for (i=0; i<MODESCNT; ++i) {
-	if (modemap[i].canonmode == t) {
-	    return (mode | (modemap[i].hackmode & MODE_SHOOTING_MASK));
-	}
-    }
-    return (mode);
+#if 0
+int rec_switch_state(void) {
+//    mode  = (physw_status[1]&0x0F)==0x0B ?  MODE_PLAY : MODE_REC;
+	return (physw_status[1]&0x0F)!=0x0B;
 }
+#endif

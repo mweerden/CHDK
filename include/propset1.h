@@ -2,7 +2,8 @@
 #define PROPSET1_H
 /* 
 constants for propset 1, most digic2 camera
-WARNING: this file is used gen_propset_lua.sh to generate propset.lua
+WARNING:
+ The build uses tools/gen_propset_lua.sed to generate propset1.lua from this file
 */
 #define PROPCASE_DRIVE_MODE    				6
 #define PROPCASE_FOCUS_MODE    				12
@@ -42,4 +43,5 @@ WARNING: this file is used gen_propset_lua.sh to generate propset.lua
 #define PROPCASE_FLASH_SYNC_CURTAIN			20
 #define PROPCASE_METERING_MODE				9
 #define PROPCASE_WB_ADJ                               100
+#define PROPCASE_OPTICAL_ZOOM_POSITION        99 // tested a540, sd400
 #endif

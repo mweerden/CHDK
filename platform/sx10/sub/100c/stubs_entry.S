@@ -26,8 +26,6 @@ NSTUB(GetBatteryTemperature, 0xff84e658)
 NSTUB(GetCCDTemperature, 0xff84e5e8)
 // Best match: 88%
 NSTUB(GetCurrentAvValue, 0xff93be7c)
-// Best match: 64%
-NSTUB(GetCurrentTargetDistance, 0xff93a304)
 // Best match: 55%
 NSTUB(GetDrive_ClusterSize, 0xff85ae90)
 // ALT: NSTUB(GetDrive_ClusterSize, 0xff85aec4) // 15/12
@@ -40,8 +38,10 @@ NSTUB(GetDrive_FreeClusters, 0xff85ae90)
 NSTUB(GetDrive_TotalClusters, 0xff85ae90)
 // ALT: NSTUB(GetDrive_TotalClusters, 0xff85aec4) // 15/12
 // ALT: NSTUB(GetDrive_TotalClusters, 0xff85aef8) // 15/12
-// Best match: 56%
-NSTUB(GetFocusLensSubjectDistance, 0xffa62f48)
+// Best match: 64%
+NSTUB(GetFocusLensSubjectDistance, 0xff93a304)
+// Best match: 77%
+NSTUB(GetFocusLensSubjectDistanceFromLens, 0xff93a610)
 // Best match: 96%
 NSTUB(GetOpticalTemperature, 0xff84e6c8)
 // Best match: 66%
@@ -69,6 +69,10 @@ NSTUB(NewTaskShell, 0xff879178)
 NSTUB(Open, 0xff823a3c)
 // Best match: 90%
 NSTUB(PT_PlaySound, 0xff8659d4)
+// Best match: 86%
+NSTUB(PostLogicalEventForNotPowerType, 0xff87ec94)
+// Best match: 92%
+NSTUB(PostLogicalEventToUI, 0xff87ece0)
 NSTUB(Read, 0xff819a4c)
 NSTUB(ReadFastDir, 0xffa49114)
 // ERROR: RefreshPhysicalScreen is not found!
@@ -77,7 +81,11 @@ NSTUB(Remove, 0xff823aac)
 NSTUB(RenameFile_Fut, 0xff8232bc)
 // Best match: 93%
 NSTUB(SetAutoShutdownTime, 0xff880fdc)
+// Best match: 81%
+NSTUB(SetCurrentCaptureModeType, 0xff8886ac)
 NSTUB(SetFileTimeStamp, 0xff823d40)
+// Best match: 64%
+NSTUB(SetLogicalEventActive, 0xff880c28)
 // Best match: 68%
 NSTUB(SetParameterData, 0xff975300)
 // Best match: 72%
@@ -154,6 +162,7 @@ NSTUB(strncpy, 0xff82db14)
 // Best match: 80%
 NSTUB(strrchr, 0xff89b918)
 NSTUB(strtol, 0xff82dd4c)
+NSTUB(strtolx, 0xff82db50)
 // Best match: 83%
 NSTUB(time, 0xff873764)
 NSTUB(vsprintf, 0xff81cae8)

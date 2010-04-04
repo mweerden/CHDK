@@ -75,7 +75,49 @@ const ISOTable iso_table[] = {
 	{  5,  800,  "800", -1},
 	{  6, 1600, "1600", -1},
 	{  7, 3200, "3200", -1},
-};          
+};    
+
+/*
+http://www.usa.canon.com/consumer/controller?act=ModelInfoAct&fcategoryid=225&modelid=18329#ModelTechSpecsAct
+Shooting Modes
+    Auto, P, Av, Tv, M, Portrait, Landscape,
+    Special Scene
+        (Foliage, Snow, Beach, Sunset, Fireworks, Aquarium, Night Scene,
+        ISO 3200, Color Accent, Color Swap, Stitch Assist),
+    Super Macro, Indoor, Kids & Pets, Night Snapshot, Movie
+Movie: High Definition: 1280 x 720 (30 fps); 
+    Standard Definition: 640 x 480 (30 fps), 320 x 240 (30 fps)
+
+canon mode list FFB6D0A4 in 100c
+*/
+static const CapturemodeMap modemap[] = {
+	{ MODE_AUTO,               32768  },
+	{ MODE_P,                  32772  },
+	{ MODE_TV,                 32771  },
+	{ MODE_AV,                 32770  },
+	{ MODE_M,                  32769  },
+	{ MODE_EASY,               33311  }, // not mentioned in web specs, but in manual and mode list
+	{ MODE_PORTRAIT,           32781  },
+	{ MODE_NIGHT_SNAPSHOT,     32779  }, 
+	{ MODE_LANDSCAPE,          32780  },
+	{ MODE_VIDEO_COLOR_ACCENT, 2599   },
+	{ MODE_VIDEO_COLOR_SWAP,   2600   },
+	{ MODE_VIDEO_STD,          2601   },
+	{ MODE_KIDS_PETS,          32784  },
+	{ MODE_INDOOR,             32785  },
+
+	{ MODE_SCN_SUNSET,         16402  },
+	{ MODE_SCN_NIGHT_SCENE,    16398  },
+	{ MODE_SCN_FIREWORK,       16406  },
+	{ MODE_SCN_BEACH,          16405  },
+	{ MODE_SCN_AQUARIUM,       16408  },
+	{ MODE_SCN_FOLIAGE,        16403  },
+	{ MODE_SCN_SNOW,           16404  },
+	{ MODE_SCN_ISO_3200,       16413  },
+	{ MODE_SCN_COLOR_ACCENT,   16923  },
+	{ MODE_SCN_COLOR_SWAP,     16924  },
+	{ MODE_SCN_STITCH,         16906  }
+};
 
 #include "../generic/shooting.c"
 
@@ -99,4 +141,4 @@ long get_target_dir_num() {
 	return n;
 }
 
-int circle_of_confusion = 6;
+int circle_of_confusion = 5;

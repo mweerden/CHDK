@@ -76,6 +76,51 @@ const ISOTable iso_table[] = {
     {  6, 1600, "1600", -1},
 };          
 
+/*
+http://www.usa.canon.com/consumer/controller?act=ModelInfoAct&fcategoryid=225&modelid=14903#ModelTechSpecsAct
+
+Shooting Modes
+    Auto, Camera M,
+    Special Scene
+        (Portrait, Foliage, Snow, Beach, Aquarium, Indoor, Night Snapshot),
+    Color Accent, Color Swap, Super Macro, Stitch Assist, Movie
+Movie: 1280 x 720/640 x 480 (30 fps/30 fps LP), 
+    320 x 240 (60 fps/30 fps) available up to 4GB or 1 hour for each file size. 
+
+canon mode list FFB68D28 in 100g
+*/
+static const CapturemodeMap modemap[] = {
+    { MODE_LONG_SHUTTER,       32774 }, // guessed
+    { MODE_AUTO,               32768 },
+    { MODE_P,                  32772 },
+    { MODE_SUPER_MACRO,        33289 },
+    { MODE_COLOR_ACCENT,       33306 },
+    { MODE_COLOR_SWAP,         33307 }, // was MY_COLORS
+    { MODE_STITCH,             33290 }, 
+    { MODE_SCN_PORTRAIT,       16397 },
+    { MODE_SCN_NIGHT_SNAPSHOT, 16395 },
+    { MODE_SCN_INDOOR,         16401 },
+    { MODE_SCN_FOLIAGE,        16402 },
+    { MODE_SCN_SNOW,           16403 },
+    { MODE_SCN_BEACH,          16404 },
+    { MODE_SCN_AQUARIUM,       16407 },
+    // TODO this appears to be the standard mode+1024 for cameras with a video button
+    // most of these can go away when we handle that more sanely
+    { MODE_VIDEO_STD,          33792 },
+    { MODE_VIDEO_MANUAL,       33796 },
+    { MODE_VIDEO_COLOR_ACCENT, 34330 },
+    { MODE_VIDEO_COLOR_SWAP,   34331 },
+    { MODE_VIDEO_STITCH,       34314 },
+    { MODE_VIDEO_PORTRAIT,     17421 },
+    { MODE_VIDEO_NIGHT,        17419 },
+    { MODE_VIDEO_INDOOR,       17425 },
+    { MODE_VIDEO_FOLIAGE,      17426 },
+    { MODE_VIDEO_SNOW,         17427 },
+    { MODE_VIDEO_BEACH,        17428 },
+    { MODE_VIDEO_AQUARIUM,     17431 },
+    { MODE_VIDEO_SUPER_MACRO,  34313 },
+};
+
 #include "../generic/shooting.c"
 
 long get_file_next_counter() {

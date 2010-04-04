@@ -60,6 +60,9 @@ NSTUB(MoveZoomLensWithPoint, 0xffa56de8)
 // ALT: NSTUB(MoveZoomLensWithPoint, 0xffa56de8) // 25/0
 // ERROR: Open is not found!
 // ERROR: PhySw_testgpio is not found!
+NSTUB(PostLogicalEventForNotPowerType, 0xff964d10)
+NSTUB(PostLogicalEventToUI, 0xff964d9c)
+// ALT: NSTUB(PostLogicalEventToUI, 0xff964e34) // 25/0
 NSTUB(ProtectFile, 0xff862d5c)
 // Best match: 92%
 NSTUB(PutInNdFilter, 0xffa6f3c4)
@@ -78,6 +81,10 @@ NSTUB(Remove, 0xff8c70c4)
 NSTUB(RenameFile_Fut, 0xff863570)
 // Best match: 96%
 NSTUB(SetAutoShutdownTime, 0xff96787c)
+// Best match: 73%
+NSTUB(SetCurrentCaptureModeType, 0xff98fe2c)
+// Best match: 87%
+NSTUB(SetLogicalEventActive, 0xff96622c)
 // Best match: 86%
 NSTUB(SetParameterData, 0xff96b6e4)
 // ERROR: SetPropertyCase is not found!
@@ -173,6 +180,7 @@ NSTUB(strpbrk, 0xffab3c5c)
 NSTUB(strrchr, 0xffab3c98)
 // ALT: NSTUB(strrchr, 0xffab3c98) // 8/0
 NSTUB(strtol, 0xffab33ec)
+NSTUB(strtoul, 0xffab3594)
 NSTUB(taskCreateHookAdd, 0xffac029c)
 NSTUB(taskDeleteHookAdd, 0xffac01d8)
 // Best match: 82%

@@ -75,6 +75,47 @@ const ISOTable iso_table[] = {
     {  5,  800,  "800", -1},
 };          
 
+/*
+canon mode list @FFD711A8 in 100a
+http://www.usa.canon.com/consumer/controller?act=ModelInfoAct&fcategoryid=221&modelid=14117#ModelTechSpecsAct
+Shooting Modes
+    Auto; Creative: P, Av, Tv, M; Image: Portrait, Landscape, Night Scene,
+    Special Scene 
+        Foliage, Snow, Beach, Fireworks, Underwater, Indoor, Kids & Pets,
+        Night Snapshot, Color Accent, Color Swap
+    Stitch Assist, Movie
+
+Video resolutions
+640 x 480 / 320 x 240 (30 fps/15 fps) available up to 1GB or 1 hour for each file size, 320 x 240 (1 min. at 60 fps),
+160 x 120 (3 min. at 15 fps)
+*/
+static const CapturemodeMap modemap[] = {
+    { MODE_M,                  32769 },
+    { MODE_P,                  32772 },
+    { MODE_AV,                 32770 },
+    { MODE_TV,                 32771 },
+    { MODE_STITCH,             33290 },
+    { MODE_AUTO,               32768 },
+    { MODE_LANDSCAPE,          32780 },
+    { MODE_NIGHT_SCENE,        32782 },
+    { MODE_PORTRAIT,           32781 },
+    { MODE_SCN_COLOR_ACCENT,   16921 },
+    { MODE_SCN_COLOR_SWAP,     16922 },
+    { MODE_SCN_FOLIAGE,        16401 },
+    { MODE_SCN_SNOW,           16402 },
+    { MODE_SCN_BEACH,          16403 },
+    { MODE_SCN_UNDERWATER,     16405 },
+    { MODE_SCN_INDOOR,         16400 },
+    { MODE_SCN_NIGHT_SNAPSHOT, 16395 },
+    { MODE_SCN_KIDS_PETS,      16399 },
+    { MODE_SCN_FIREWORK,       16404 },
+    { MODE_VIDEO_COLOR_ACCENT, 2594  },
+    { MODE_VIDEO_COLOR_SWAP,   2595  },
+    { MODE_VIDEO_STD,          2596  },
+    { MODE_VIDEO_SPEED,        2597  },
+    { MODE_VIDEO_COMPACT,      2598  },
+};
+
 #include "../generic/shooting.c"
 
 long get_file_next_counter() {

@@ -80,6 +80,33 @@ const ISOTable iso_table[] = {
     {  4,  400,  "400", -1},
 };          
 
+/*
+http://www.usa.canon.com/consumer/controller?act=ModelInfoAct&fcategoryid=224&modelid=11158#ModelTechSpecsAct
+Shooting Modes
+	Still Images: Auto, Manual, 
+	Scene Modes
+		(Digital Macro, Portrait, Night Snapshot, Kids & Pets, Indoor, Underwater),
+	My Colors, Stitch Assist;
+	Movies: Standard, Fast Frame Rate, Compact, My Colors. 
+Movie resolutions: 640x480, 320x240, 160x120
+canon modelist @FF972440 in 101a
+*/
+
+static const CapturemodeMap modemap[] = {
+    { MODE_SCN_DIGITAL_MACRO,   0 },
+    { MODE_P,                   1 },
+    { MODE_LONG_SHUTTER,        2 },
+    { MODE_AUTO,                3 },
+    { MODE_MY_COLORS,           4 },
+    { MODE_SCN_PORTRAIT,        5 },
+	{ MODE_SCN_UNDERWATER,      6 },
+    { MODE_SCN_INDOOR,          7 },
+    { MODE_SCN_KIDS_PETS,       8 },
+    { MODE_SCN_NIGHT_SNAPSHOT,  9 },
+	{ MODE_STITCH,             10 },
+    { MODE_VIDEO_STD,          11 }
+};
+
 #include "../generic/shooting.c"
 
 long get_file_next_counter() {
@@ -103,7 +130,7 @@ long get_target_dir_num() {
     return n;
 }
 
-int circle_of_confusion = 6;
+int circle_of_confusion = 5;
 
 char* shooting_get_tv_str()
 {

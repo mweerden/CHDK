@@ -129,7 +129,7 @@ NSTUB(CreateTaskStrict,			 0xFF810958)
 NSTUB(DisableDispatch,			 0xFF810958)
 NSTUB(DisplayImagePhysicalScreen,	 0xFF810958)
 NSTUB(EnableDispatch,			 0xFF810958)
-NSTUB(GetFocusLensSubjectDistanceFromLens, 0xFF810958)
+//NSTUB(GetFocusLensSubjectDistanceFromLens, 0xFF810958)
 NSTUB(MakeDirectory,			 0xFF810958)
 NSTUB(PhySw_testgpio,			 0xFF810958)
 NSTUB(ProtectFile,			 0xFF810958)
@@ -161,3 +161,4 @@ NHSTUB(PT_PlaySound, 0xFF86015C)
 //NHSTUB(ExitFromCompensationEVF, 0xFFFFFFFF) // Stub not found. When found, remove dummy function from lib.c.
 NHSTUB(DoAFLock, 0xff826bb8)
 NHSTUB(UnlockAF, 0xff826c08)
+NHSTUB(SetScriptMode, 0xFF86CCCC) // string
