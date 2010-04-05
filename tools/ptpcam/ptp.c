@@ -1700,78 +1700,37 @@ ptp_get_operation_name(PTPParams* params, uint16_t oc)
 
 int ptp_chdk_shutdown_hard(PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  uint16_t ret;
-  PTPContainer ptp;
-
-  PTP_CNT_INIT(ptp);
-  ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=2;
-  ptp.Param1=PTP_CHDK_Shutdown;
-  ptp.Param2=0;
-  ret=ptp_transaction(params, &ptp, PTP_DP_NODATA, 0, NULL);
-  if ( ret != 0x2ff )
-  {
-    ptp_error(params,"unexpected return code 0x%x",ret);
-    return 0;
-  }
-  return 1;
+  return ptp_chdk_exec_lua("shut_down(1);",params,deviceinfo);
 }
 
 int ptp_chdk_shutdown_soft(PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  uint16_t ret;
-  PTPContainer ptp;
-
-  PTP_CNT_INIT(ptp);
-  ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=2;
-  ptp.Param1=PTP_CHDK_Shutdown;
-  ptp.Param2=1;
-  ret=ptp_transaction(params, &ptp, PTP_DP_NODATA, 0, NULL);
-  if ( ret != 0x2001 )
-  {
-    ptp_error(params,"unexpected return code 0x%x",ret);
-    return 0;
-  }
-  return 1;
+  return ptp_chdk_exec_lua("shut_down(0);",params,deviceinfo);
 }
 
 int ptp_chdk_reboot(PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  uint16_t ret;
-  PTPContainer ptp;
-
-  PTP_CNT_INIT(ptp);
-  ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=2;
-  ptp.Param1=PTP_CHDK_Shutdown;
-  ptp.Param2=2;
-  ret=ptp_transaction(params, &ptp, PTP_DP_NODATA, 0, NULL);
-  if ( ret != 0x2ff )
-  {
-    ptp_error(params,"unexpected return code 0x%x",ret);
-    return 0;
-  }
-  return 1;
+  return ptp_chdk_exec_lua("reboot();",params,deviceinfo);
 }
 
 int ptp_chdk_reboot_fw_update(char *path, PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  uint16_t ret;
-  PTPContainer ptp;
+  char *s;
+  int ret;
 
-  PTP_CNT_INIT(ptp);
-  ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=2;
-  ptp.Param1=PTP_CHDK_Shutdown;
-  ptp.Param2=3;
-  ret=ptp_transaction(params, &ptp, PTP_DP_SENDDATA, strlen(path), &path);
-  if ( ret != 0x2ff )
+  s = malloc(strlen(path)+12);
+  if ( s == NULL )
   {
-    ptp_error(params,"unexpected return code 0x%x",ret);
+    ptp_error(params,"could not allocate memory for command",ret);
     return 0;
   }
-  return 1;
+
+  sprintf(s,"reboot(\"%s\");",path);
+  ret = ptp_chdk_exec_lua(s,params,deviceinfo);
+
+  free(s);
+
+  return ret;
 }
 
 char* ptp_chdk_get_memory(int start, int num, PTPParams* params, PTPDeviceInfo* deviceinfo)
@@ -1800,14 +1759,15 @@ int ptp_chdk_set_memory_long(int addr, int val, PTPParams* params, PTPDeviceInfo
 {
   uint16_t ret;
   PTPContainer ptp;
+  char *buf = (char *) &val;
 
   PTP_CNT_INIT(ptp);
   ptp.Code=PTP_OC_CHDK;
   ptp.Nparam=3;
-  ptp.Param1=PTP_CHDK_SetMemoryLong;
+  ptp.Param1=PTP_CHDK_SetMemory;
   ptp.Param2=addr;
-  ptp.Param3=val;
-  ret=ptp_transaction(params, &ptp, PTP_DP_NODATA, 0, NULL);
+  ptp.Param3=4;
+  ret=ptp_transaction(params, &ptp, PTP_DP_SENDDATA, 4, &buf);
   if ( ret != 0x2001 )
   {
     ptp_error(params,"unexpected return code 0x%x",ret);
@@ -1840,46 +1800,14 @@ int ptp_chdk_call(int *args, int size, int *ret, PTPParams* params, PTPDeviceInf
 
 int* ptp_chdk_get_propcase(int start, int num, PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  uint16_t ret;
-  PTPContainer ptp;
-  char *buf = NULL;
-
-  PTP_CNT_INIT(ptp);
-  ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=3;
-  ptp.Param1=PTP_CHDK_GetPropCase;
-  ptp.Param2=start;
-  ptp.Param3=num;
-  ret=ptp_transaction(params, &ptp, PTP_DP_GETDATA, 0, &buf);
-  if ( ret != 0x2001 )
-  {
-    ptp_error(params,"unexpected return code 0x%x",ret);
-    free(buf);
-    return NULL;
-  }
-  return (int *) buf;
+  ptp_error(params,"not implemented! (use Lua)");
+  return NULL;
 }
 
 char* ptp_chdk_get_paramdata(int start, int num, PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  uint16_t ret;
-  PTPContainer ptp;
-  char *buf = NULL;
-
-  PTP_CNT_INIT(ptp);
-  ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=3;
-  ptp.Param1=PTP_CHDK_GetParamData;
-  ptp.Param2=start;
-  ptp.Param3=num;
-  ret=ptp_transaction(params, &ptp, PTP_DP_GETDATA, 0, &buf);
-  if ( ret != 0x2001 )
-  {
-    ptp_error(params,"unexpected return code 0x%x",ret);
-    free(buf);
-    return NULL;
-  }
-  return buf;
+  ptp_error(params,"not implemented! (use Lua)");
+  return NULL;
 }
 
 int ptp_chdk_upload(char *local_fn, char *remote_fn, PTPParams* params, PTPDeviceInfo* deviceinfo)
@@ -1974,21 +1902,17 @@ int ptp_chdk_download(char *remote_fn, char *local_fn, PTPParams* params, PTPDev
 
 int ptp_chdk_switch_mode(int mode, PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  uint16_t ret;
-  PTPContainer ptp;
+  char s[16];
+  int ret;
 
-  PTP_CNT_INIT(ptp);
-  ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=2;
-  ptp.Param1=PTP_CHDK_SwitchMode;
-  ptp.Param2=mode;
-  ret=ptp_transaction(params, &ptp, PTP_DP_NODATA, 0, NULL);
-  if ( ret != 0x2001 )
+  if ( mode/10 != 0 )
   {
-    ptp_error(params,"unexpected return code 0x%x",ret);
+    ptp_error(params,"mode not supported by ptpcam");
     return 0;
   }
-  return 1;
+
+  sprintf(s,"switch_mode(%i);",mode);
+  return ptp_chdk_exec_lua(s,params,deviceinfo);
 }
 
 int ptp_chdk_exec_lua(char *script, PTPParams* params, PTPDeviceInfo* deviceinfo)
@@ -1998,8 +1922,9 @@ int ptp_chdk_exec_lua(char *script, PTPParams* params, PTPDeviceInfo* deviceinfo
 
   PTP_CNT_INIT(ptp);
   ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=1;
-  ptp.Param1=PTP_CHDK_ExecuteLUA;
+  ptp.Nparam=2;
+  ptp.Param1=PTP_CHDK_ExecuteScript;
+  ptp.Param2=PTP_CHDK_SL_LUA;
   r=ptp_transaction(params, &ptp, PTP_DP_SENDDATA, strlen(script)+1, &script);
   if ( r != 0x2001 )
   {
@@ -2009,3 +1934,22 @@ int ptp_chdk_exec_lua(char *script, PTPParams* params, PTPDeviceInfo* deviceinfo
   return 1;
 }
 
+int ptp_chdk_get_version(PTPParams* params, PTPDeviceInfo* deviceinfo, int *major, int *minor)
+{
+  uint16_t r;
+  PTPContainer ptp;
+
+  PTP_CNT_INIT(ptp);
+  ptp.Code=PTP_OC_CHDK;
+  ptp.Nparam=1;
+  ptp.Param1=PTP_CHDK_Version;
+  r=ptp_transaction(params, &ptp, PTP_DP_NODATA, 0, NULL);
+  if ( r != 0x2001 )
+  {
+    ptp_error(params,"unexpected return code 0x%x",r);
+    return 0;
+  }
+  *major = ptp.Param1;
+  *minor = ptp.Param2;
+  return 1;
+}

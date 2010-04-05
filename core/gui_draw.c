@@ -389,9 +389,7 @@ void draw_clear() {
 
 //-------------------------------------------------------------------
 void draw_restore() {
-//    if (gui_get_mode()!=GUI_MODE_NONE) vid_turn_on_updates();
     vid_bitmap_refresh();
-//    if (gui_get_mode()!=GUI_MODE_NONE) vid_turn_off_updates();
 }
 
 //-------------------------------------------------------------------

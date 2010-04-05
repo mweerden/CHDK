@@ -280,10 +280,8 @@ extern unsigned _ExecuteEventProcedure(const char *name,...);
 // known in CHDK as _RefreshPhysicalScreen
 //extern void _ScreenUnLock();
 
+#ifdef CAM_CHDK_PTP
 extern int _add_ptp_handler(int, void*, int);
-extern void _reboot_fw_update(char *);
-extern void _set_control_event(int);
-extern void _PB2Rec();
-extern void _Rec2PB();
+#endif
 
 #endif

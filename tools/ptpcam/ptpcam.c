@@ -2165,6 +2165,17 @@ static int connected = 0;
 static void open_connection()
 {
   connected = (0 == open_camera(camera_bus,camera_dev,camera_force,&ptp_usb,&params,&dev));
+  if ( connected )
+  {
+    int major,minor;
+    if ( !ptp_chdk_get_version(&params,&params.deviceinfo,&major,&minor) )
+    {
+      printf("error: cannot get camera CHDK PTP version; either it has an unsupported version or no CHDK PTP support at all\n");
+    } else if ( major != PTP_CHDK_VERSION_MAJOR || minor < PTP_CHDK_VERSION_MINOR )
+    {
+      printf("error: camera has unsupported camera version %i.%i; some functionality may be missing or cause unintented consequences\n",major,minor);
+    }
+  }
 }
 
 static void close_connection()
@@ -2295,6 +2306,7 @@ int chdk(int busn, int devn, short force)
           "q quit                         quit program\n"
           "h help                         list commands\n"
           "r reset                        reconnect to camera\n"
+          "  version                      get CHDK PTP version (ptpcam and camera)\n"
           "  shutdown-hard                shutdown camera (hard)\n"
           "  shutdown-soft                shutdown camera (soft)\n"
           "  reboot                       reboot camera\n"
@@ -2305,12 +2317,12 @@ int chdk(int busn, int devn, short force)
           "m memory <address> <num>       get num bytes at given address\n"
           "  set <address> <long>         set long value at address\n"
           "c call <address> <arg1> ...    call function at address with given arguments\n"
-          "  prop <id>                    get value of property\n"
-          "  prop <id>-<id>               get values in property range\n"
-          "  prop <id> <num>              get num values of properties starting at id\n"
-          "  param <id>                   get value of parameter\n"
-          "  param <id>-<id>              get values in parameter range\n"
-          "  param <id> <num>             get num values of parameters starting at id\n"
+//          "  prop <id>                    get value of property\n"
+//          "  prop <id>-<id>               get values in property range\n"
+//          "  prop <id> <num>              get num values of properties starting at id\n"
+//          "  param <id>                   get value of parameter\n"
+//          "  param <id>-<id>              get values in parameter range\n"
+//          "  param <id> <num>             get num values of parameters starting at id\n"
           "u upload <local> <remote>      upload local file to camera\n"
           "d download <remote> <local>    download file from camera\n"
           "  mode <val>                   set mode (0=playback,1=record)\n"
@@ -2320,6 +2332,15 @@ int chdk(int busn, int devn, short force)
     } else if ( !strcmp("r",buf) || !strcmp("reset",buf) )
     {
       reset_connection();
+
+    } else if ( !strcmp("version",buf) )
+    {
+      int major, minor;
+      printf("ptpcam: %i.%i\n",PTP_CHDK_VERSION_MAJOR,PTP_CHDK_VERSION_MINOR);
+      if ( ptp_chdk_get_version(&params,&params.deviceinfo,&major,&minor) )
+      {
+        printf("camera: %i.%i\n",major,minor);
+      }
 
     } else if ( !strcmp("shutdown-hard",buf) )
     {

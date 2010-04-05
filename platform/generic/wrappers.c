@@ -948,12 +948,23 @@ long __attribute__((weak)) _GetCurrentTargetDistance()
 }
 #endif
 
+#ifdef CAM_CHDK_PTP
 int add_ptp_handler(int opcode, ptp_handler handler, int unknown)
 {
   return _add_ptp_handler(opcode,handler,unknown);
 }
+#endif
 
 void ExitTask()
 {
   _ExitTask();
+}
+
+void __attribute__((weak)) reboot(const char *fw_update)
+{
+}
+
+int __attribute__((weak)) switch_mode(int mode)
+{
+  return 0;
 }

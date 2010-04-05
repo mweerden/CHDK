@@ -95,16 +95,13 @@ void vid_turn_on_updates()
   _RefreshPhysicalScreen(1);
 }
 
-void shutdown_soft()
-{
-   _PostLogicalEventForNotPowerType(0x1005,0);
-}
-
-void reboot(char *fw_update)
+extern void _reboot_fw_update(const char *);
+void reboot(const char *fw_update)
 {
   if ( fw_update == 0 )
   {
     // sequence taken from reboot_fw_update
+    // XXX only for 1.01a!!!
     ((void (*)()) 0xFF94F7B8)();
     ((void (*)()) 0xFF842480)();
     ((void (*)()) 0xFF841594)();
@@ -115,7 +112,11 @@ void reboot(char *fw_update)
   }
 }
 
-void switch_mode(int mode)
+extern void _set_control_event(int);
+extern void _PB2Rec();
+extern void _Rec2PB();
+int switch_mode(int mode)
+  // XXX make independent of USB
 {
   if ( mode == 0 )
   {
@@ -125,5 +126,9 @@ void switch_mode(int mode)
   {
     _set_control_event(0x902); // 0x10A6 DisconnectUSBCable
     _PB2Rec();
+  } else {
+    return 0;
   }
+
+  return 1;
 }

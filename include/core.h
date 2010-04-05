@@ -1,6 +1,8 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include "camera.h"
+
 void core_spytask();
 
 void core_hook_task_create(void *tcb);
@@ -19,7 +21,9 @@ void core_spytask_can_start();
 
 long core_get_noise_reduction_value();
 
+#ifdef CAM_CHDK_PTP
 void init_chdk_ptp();
+#endif
 
 #endif
 

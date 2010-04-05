@@ -489,6 +489,7 @@ unsigned call_func_ptr(void *func, const unsigned *args, unsigned n_args);
 #define finished() debug_led(0)
 
 
+#ifdef CAM_CHDK_PTP
 
 typedef struct {
     int code;
@@ -504,7 +505,7 @@ typedef struct {
 
 typedef struct {
     int handle;
-    int (*send_data)(int handle, char *buf, int size, int size_again, int, int, int); // (0xFF9F525C)
+    int (*send_data)(int handle, char *buf, int part_size, int total_size, int, int, int); // (0xFF9F525C), total_size should be 0 except for the first call
     int (*recv_data)(int handle, char *buf, int size, int, int); // (0xFF9F5500)
     int (*send_resp)(int handle, PTPContainer *resp); // (0xFF9F5688)
     int (*get_data_size)(int handle); // (0xFF9F5830)
@@ -519,9 +520,11 @@ typedef int (*ptp_handler)(int, ptp_data*, int, int, int, int, int, int, int, in
 
 int add_ptp_handler(int opcode, ptp_handler handler, int unknown);
 
-void shutdown_soft();
-void reboot(char *fw_update); // fw_update == NULL implies normal reboot
-void switch_mode(int mode); // 0 = playback, 1 = record; only call while USB connected
+#endif // CAM_CHDK_PTP
+
+void reboot(const char *fw_update); // fw_update == NULL implies normal reboot
+int switch_mode(int mode); // 0 = playback, 1 = record; return indicates success
+                           // N.B.: switch_mode currently only supported when USB is connected
 
 void ExitTask();
 

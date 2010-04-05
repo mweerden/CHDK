@@ -2589,69 +2589,32 @@ void gui_draw_debug_vals_osd() {
         //        long v=get_file_counter();
         //	sprintf(osd_buf, "1:%03d-%04d  ", (v>>18)&0x3FF, (v>>4)&0x3FFF);
         //	sprintf(osd_buf, "1:%d, %08X  ", xxxx, eeee);
-        
-//        extern long debug_long;
-//        sprintf(osd_buf, "8:%08x  ", debug_long);
-//        draw_txt_string(28, 10, osd_buf, conf.osd_color);
-
-//        sprintf(osd_buf, "8:%08x  ", *((int *)0xC02200F8));
-//        draw_txt_string(28, 10, osd_buf, conf.osd_color);
-//
-//        sprintf(osd_buf, "C:%08x  ", *((int *)0xC02200FC));
-//        draw_txt_string(28, 11, osd_buf, conf.osd_color);
-
-//     int zp=lens_get_zoom_point(), fl1=get_focal_length(zp);     
-//        sprintf(osd_buf, "zp:%8i  ", zp);
-//        draw_txt_string(28, 10, osd_buf, conf.osd_color);
-//
-//        sprintf(osd_buf, "fl:%8i  ", fl1);
-//        draw_txt_string(28, 11, osd_buf, conf.osd_color);
-
+        /*
         extern long physw_status[3];
-//        sprintf(osd_buf, "0:%8x  ", physw_status[0]);
-//        draw_txt_string(28, 10, osd_buf, conf.osd_color);
-//
-//        sprintf(osd_buf, "1:%8x  ", physw_status[1]);
-//        draw_txt_string(28, 11, osd_buf, conf.osd_color);
-//
-        sprintf(osd_buf, "2:%8x  ", physw_status[2]);
-        draw_txt_string(28, 9, osd_buf, conf.osd_color);
-        short x;
-        sprintf(osd_buf, "zs:%8x  ", zoom_status);
+        sprintf(osd_buf, "1:%8x  ", physw_status[0]);
         draw_txt_string(28, 10, osd_buf, conf.osd_color);
-        get_property_case(PROPCASE_DIGITAL_ZOOM_STATE, &x, sizeof(x));
-        sprintf(osd_buf, "dzs:%8x  ", x);
+
+        sprintf(osd_buf, "2:%8x  ", physw_status[1]);
         draw_txt_string(28, 11, osd_buf, conf.osd_color);
-        get_property_case(PROPCASE_DIGITAL_ZOOM_POSITION, &x, sizeof(x));
-        sprintf(osd_buf, "dzp:%8x  ", x);
+
+        sprintf(osd_buf, "3:%8x  ", physw_status[2]);
         draw_txt_string(28, 12, osd_buf, conf.osd_color);
 
         //      sprintf(osd_buf, "4:%8x  ", vid_get_viewport_fb_d());
-        
-//        sprintf(osd_buf, "j:%8x  ", Get_JogDial());
-//        draw_txt_string(28,  9, osd_buf, conf.osd_color);
-
-//      extern long movie_status;
-//        sprintf(osd_buf, "m:%8x  ", movie_status);
-//        draw_txt_string(28,  9, osd_buf, conf.osd_color);
-
-//      extern long playrec_mode;
-//      sprintf(osd_buf, "m:%8x  ", playrec_mode);
-//      draw_txt_string(28,  9, osd_buf, conf.osd_color);
-
-        //sprintf(osd_buf, "u:%8x  ", get_usb_power(1));
-        //draw_txt_string(28,  9, osd_buf, conf.osd_color);
+        */
+        sprintf(osd_buf, "u:%8x  ", get_usb_power(1));
+        draw_txt_string(28,  9, osd_buf, conf.osd_color);
 
         sprintf(osd_buf, "1:%8x  ", (void*) (*(int*)conf.mem_view_addr_init));
-        //draw_txt_string(28, 10, osd_buf, conf.osd_color);
+        draw_txt_string(28, 10, osd_buf, conf.osd_color);
 
     extern volatile long focus_busy;
         sprintf(osd_buf, "f:%8x  ", focus_busy);
-        //draw_txt_string(28, 11, osd_buf, conf.osd_color);
+        draw_txt_string(28, 11, osd_buf, conf.osd_color);
 
     extern volatile long zoom_busy;
         sprintf(osd_buf, "z:%8x  ", zoom_busy);
-        //draw_txt_string(28, 12, osd_buf, conf.osd_color);
+        draw_txt_string(28, 12, osd_buf, conf.osd_color);
 
         // some cameras missing zoom_status
         #if 0
