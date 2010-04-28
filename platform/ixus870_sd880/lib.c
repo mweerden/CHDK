@@ -115,8 +115,7 @@ void reboot(const char *fw_update)
 extern void _set_control_event(int);
 extern void _PB2Rec();
 extern void _Rec2PB();
-int switch_mode(int mode)
-  // XXX make independent of USB
+int switch_mode_usb(int mode)
 {
   if ( mode == 0 )
   {

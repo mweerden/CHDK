@@ -523,8 +523,8 @@ int add_ptp_handler(int opcode, ptp_handler handler, int unknown);
 #endif // CAM_CHDK_PTP
 
 void reboot(const char *fw_update); // fw_update == NULL implies normal reboot
-int switch_mode(int mode); // 0 = playback, 1 = record; return indicates success
-                           // N.B.: switch_mode currently only supported when USB is connected
+int switch_mode_usb(int mode); // 0 = playback, 1 = record; return indicates success
+                               // N.B.: switch_mode only supported when USB is connected
 
 void ExitTask();
 

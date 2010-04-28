@@ -1172,8 +1172,8 @@ static int luaCB_reboot( lua_State* L )
 }
 
 // switch mode (0 = playback, 1 = record)
-// XXX currently only for when USB is connected
-static int luaCB_switch_mode( lua_State* L )
+// only for when USB is connected
+static int luaCB_switch_mode_usb( lua_State* L )
 {
   int mode = luaL_checknumber(L,1);
 
@@ -1182,7 +1182,7 @@ static int luaCB_switch_mode( lua_State* L )
     return 0;
   }
 
-  return switch_mode(mode);
+  return switch_mode_usb(mode);
 }
 
 /*
@@ -1465,7 +1465,7 @@ void register_lua_funcs( lua_State* L )
    FUNC(set_record);
 
    FUNC(reboot);
-   FUNC(switch_mode);
+   FUNC(switch_mode_usb);
 
 #ifdef OPT_LUA_CALL_NATIVE
    FUNC(call_event_proc);

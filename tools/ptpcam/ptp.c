@@ -1912,7 +1912,7 @@ int ptp_chdk_switch_mode(int mode, PTPParams* params, PTPDeviceInfo* deviceinfo)
     return 0;
   }
 
-  sprintf(s,"switch_mode(%i);",mode);
+  sprintf(s,"switch_mode_usb(%i);",mode);
   return ptp_chdk_exec_lua(s,0,params,deviceinfo);
 }
 
