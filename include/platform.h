@@ -505,7 +505,7 @@ typedef struct {
 
 typedef struct {
     int handle;
-    int (*send_data)(int handle, char *buf, int part_size, int total_size, int, int, int); // (0xFF9F525C), total_size should be 0 except for the first call
+    int (*send_data)(int handle, const char *buf, int part_size, int total_size, int, int, int); // (0xFF9F525C), total_size should be 0 except for the first call
     int (*recv_data)(int handle, char *buf, int size, int, int); // (0xFF9F5500)
     int (*send_resp)(int handle, PTPContainer *resp); // (0xFF9F5688)
     int (*get_data_size)(int handle); // (0xFF9F5830)

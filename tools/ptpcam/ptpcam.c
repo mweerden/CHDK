@@ -2327,6 +2327,7 @@ int chdk(int busn, int devn, short force)
           "d download <remote> <local>    download file from camera\n"
           "  mode <val>                   set mode (0=playback,1=record)\n"
           "  lua <code>                   execute lua code\n"
+          "  luar <code>                  execute \"return <code>\" and retreive result\n"
           );
       
     } else if ( !strcmp("r",buf) || !strcmp("reset",buf) )
@@ -2623,7 +2624,14 @@ int chdk(int busn, int devn, short force)
 
     } else if ( !strncmp("lua ",buf,4) )
     {
-      if ( !ptp_chdk_exec_lua(buf+4,&params,&params.deviceinfo) )
+      if ( !ptp_chdk_exec_lua(buf+4,0,&params,&params.deviceinfo) )
+      {
+        printf("execution failed!\n");
+      }
+
+    } else if ( !strncmp("luar ",buf,5) )
+    {
+      if ( !ptp_chdk_exec_lua(buf+4,1,&params,&params.deviceinfo) )
       {
         printf("execution failed!\n");
       }

@@ -5,6 +5,7 @@
 #include "stdlib.h"
 #include "ptp.h"
 #include "script.h"
+#include "lua.h"
 
 #define BUF_SIZE 0x20000 // XXX what's a good camera-independent value?
 
@@ -47,7 +48,7 @@ static int recv_ptp_data(ptp_data *data, char *buf, int size)
   return 1;
 }
 
-static int send_ptp_data(ptp_data *data, char *buf, int size)
+static int send_ptp_data(ptp_data *data, const char *buf, int size)
   // repeated calls per transaction are *not* ok
 {
   int tmpsize;
@@ -75,12 +76,27 @@ static int send_ptp_data(ptp_data *data, char *buf, int size)
   return 1;
 }
 
+static lua_State *get_lua_thread(lua_State *L)
+{
+  lua_State *Lt;
+
+  lua_getfield(L,LUA_REGISTRYINDEX,"Lt");
+  Lt = lua_tothread(L,-1);
+  lua_pop(L,1);
+
+  return Lt;
+}
+
 static int handle_ptp(
                int h, ptp_data *data, int opcode, int sess_id, int trans_id,
                int param1, int param2, int param3, int param4, int param5)
 {
-  static char *temp_data = NULL;
-  static int temp_data_size = 0;
+  static union {
+    char *str;
+    lua_State *lua_state;
+  } temp_data;
+  static int temp_data_kind = 0; // 0: nothing, 1: ascii string, 2: lua object
+  static int temp_data_extra; // size (ascii string) or type (lua object)
   PTPContainer ptp;
 
   // initialise default response
@@ -153,24 +169,67 @@ static int handle_ptp(
       }
 
     case PTP_CHDK_TempData:
-      if ( temp_data != NULL )
+      if ( param2 & PTP_CHDK_TD_DOWNLOAD )
       {
-        free(temp_data);
-        temp_data = NULL;
+        const char *s;
+        size_t l;
+
+        if ( temp_data_kind == 0 )
+        {
+          ptp.code = PTP_RC_GeneralError;
+          break;
+        }
+
+        if ( temp_data_kind == 1 )
+        {
+          s = temp_data.str;
+          l = temp_data_extra;
+        } else { // temp_data_kind == 2
+          s = lua_tolstring(get_lua_thread(temp_data.lua_state),1,&l);
+        }
+
+        if ( !send_ptp_data(data,s,l) )
+        {
+          ptp.code = PTP_RC_GeneralError;
+          break;
+        }
+        
+      } else if ( ! (param2 & PTP_CHDK_TD_CLEAR) ) {
+        if ( temp_data_kind == 1 )
+        {
+          free(temp_data.str);
+        } else if ( temp_data_kind == 2 )
+        {
+          lua_close(temp_data.lua_state);
+        }
+        temp_data_kind = 0;
+
+        temp_data_extra = data->get_data_size(data->handle);
+
+        temp_data.str = (char *) malloc(temp_data_extra);
+        if ( temp_data.str == NULL )
+        {
+          ptp.code = PTP_RC_GeneralError;
+          break;
+        }
+
+        if ( !recv_ptp_data(data,temp_data.str,temp_data_extra) )
+        {
+          ptp.code = PTP_RC_GeneralError;
+          break;
+        }
+        temp_data_kind = 1;
       }
-
-      temp_data_size = data->get_data_size(data->handle);
-
-      temp_data = (char *) malloc(temp_data_size);
-      if ( temp_data == NULL )
+      if ( param2 & PTP_CHDK_TD_CLEAR )
       {
-        ptp.code = PTP_RC_GeneralError;
-        break;
-      }
-
-      if ( !recv_ptp_data(data,temp_data,temp_data_size) )
-      {
-        ptp.code = PTP_RC_GeneralError;
+        if ( temp_data_kind == 1 )
+        {
+          free(temp_data.str);
+        } else if ( temp_data_kind == 2 )
+        {
+          lua_close(temp_data.lua_state);
+        }
+        temp_data_kind = 0;
       }
       break;
 
@@ -237,25 +296,25 @@ static int handle_ptp(
         int tmp,t,s,r,fn_len;
         char *buf, *fn;
 
-        if ( temp_data == NULL )
+        if ( temp_data_kind != 1 )
         {
           ptp.code = PTP_RC_GeneralError;
           break;
         }
 
-        fn = (char *) malloc(temp_data_size+1);
+        fn = (char *) malloc(temp_data_extra+1);
         if ( fn == NULL )
         {
-          free(temp_data);
-          temp_data = NULL;
+          free(temp_data.str);
+          temp_data_kind = 0;
           ptp.code = PTP_RC_GeneralError;
           break;
         }
-        memcpy(fn,temp_data,temp_data_size);
-        fn[temp_data_size] = '\0';
+        memcpy(fn,temp_data.str,temp_data_extra);
+        fn[temp_data_extra] = '\0';
 
-        free(temp_data);
-        temp_data = NULL;
+        free(temp_data.str);
+        temp_data_kind = 0;
 
         f = fopen(fn,"rb");
         if ( f == NULL )
@@ -320,9 +379,58 @@ static int handle_ptp(
 
         recv_ptp_data(data,buf,s);
 
-        lua_script_exec(buf);
+        lua_script_exec(buf, param3&PTP_CHDK_ES_RESULT);
 
         free(buf);
+
+        if ( param3 & PTP_CHDK_ES_WAIT )
+        {
+          lua_script_wait();
+          if ( param3 & PTP_CHDK_ES_RESULT )
+          {
+            lua_State *Lt;
+            temp_data.lua_state = lua_get_result();
+            Lt = get_lua_thread(temp_data.lua_state);
+            temp_data_kind = 2;
+            if ( lua_gettop(Lt) == 0 )
+            {
+              temp_data_extra = PTP_CHDK_TYPE_NOTHING;
+            } else if ( lua_isnil(Lt,1) )
+            {
+              temp_data_extra = PTP_CHDK_TYPE_NIL;
+            } else if ( lua_isboolean(Lt,1) )
+            {
+              temp_data_extra = PTP_CHDK_TYPE_BOOLEAN;
+            } else if ( lua_isnumber(Lt,1) )
+            {
+              temp_data_extra = PTP_CHDK_TYPE_INTEGER;
+            } else if ( lua_isstring(Lt,1) )
+            {
+              temp_data_extra = PTP_CHDK_TYPE_STRING;
+            } else {
+              temp_data_extra = PTP_CHDK_TYPE_NOTHING;
+            }
+            ptp.num_param = 1;
+            ptp.param1 = temp_data_extra;
+            if ( temp_data_extra != PTP_CHDK_TYPE_STRING )
+            {
+              if ( temp_data_extra == PTP_CHDK_TYPE_BOOLEAN )
+              {
+                ptp.num_param = 2;
+                ptp.param2 = lua_toboolean(Lt,1);
+              } if ( temp_data_extra == PTP_CHDK_TYPE_INTEGER )
+              {
+                ptp.num_param = 2;
+                ptp.param2 = lua_tonumber(Lt,1);
+              }
+              lua_close(Lt);
+              temp_data_kind = 0;
+            } else {
+              ptp.num_param = 2;
+              ptp.param2 = lua_objlen(Lt,1);
+            }
+          }
+        }
 
         break;
       }

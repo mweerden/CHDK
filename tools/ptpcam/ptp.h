@@ -896,12 +896,40 @@ enum {
   PTP_CHDK_CallFunction,    // data is array of function pointer and (long) arguments  (max: 10 args)
                             // return param1 is return value
   PTP_CHDK_TempData,        // data is data to be stored for later
+                            // param2 is for the TD flags below
   PTP_CHDK_UploadFile,      // data is 4-byte length of filename, followed by filename and contents
   PTP_CHDK_DownloadFile,    // preceded by PTP_CHDK_TempData with filename
                             // return data are file contents
   PTP_CHDK_ExecuteScript,   // data is script to be executed
                             // param2 is language of script
+                            // param3 is for the ES flags below
 } ptp_chdk_command;
+
+// data types as used by TempData and ExecuteScript
+enum {
+  PTP_CHDK_TYPE_NOTHING = 0,
+  PTP_CHDK_TYPE_NIL,
+  PTP_CHDK_TYPE_BOOLEAN,
+  PTP_CHDK_TYPE_INTEGER,
+  PTP_CHDK_TYPE_STRING
+} ptp_chdk_type;
+
+// TempData flags
+#define PTP_CHDK_TD_DOWNLOAD  0x1  // download data instead of upload
+#define PTP_CHDK_TD_CLEAR     0x2  // clear the stored data; with DOWNLOAD this
+                                   // means first download, then clear and
+                                   // without DOWNLOAD this means no uploading,
+                                   // just clear
+
+// ExecuteScript flags
+#define PTP_CHDK_ES_WAIT      0x1  // do not return after script initialisation
+                                   // but wait until execution has finished
+                                   // (should only be used with short execution
+                                   // times)
+#define PTP_CHDK_ES_RESULT    0x2  // only in combination with WAIT; return
+                                   // param1 will be the ptp_chdk_type of the
+                                   // code result and param2 the value (booleans
+                                   // and integers) or length (strings)
 
 // Script Languages
 #define PTP_CHDK_SL_LUA    0
@@ -919,7 +947,7 @@ char* ptp_chdk_get_paramdata(int start, int num, PTPParams* params, PTPDeviceInf
 int ptp_chdk_upload(char *local_fn, char *remote_fn, PTPParams* params, PTPDeviceInfo* deviceinfo);
 int ptp_chdk_download(char *remote_fn, char *local_fn, PTPParams* params, PTPDeviceInfo* deviceinfo);
 int ptp_chdk_switch_mode(int mode, PTPParams* params, PTPDeviceInfo* deviceinfo);
-int ptp_chdk_exec_lua(char *script, PTPParams* params, PTPDeviceInfo* deviceinfo);
+int ptp_chdk_exec_lua(char *script, int get_result, PTPParams* params, PTPDeviceInfo* deviceinfo);
 int ptp_chdk_get_version(PTPParams* params, PTPDeviceInfo* deviceinfo, int *major, int *minor);
 
 

@@ -1700,17 +1700,17 @@ ptp_get_operation_name(PTPParams* params, uint16_t oc)
 
 int ptp_chdk_shutdown_hard(PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  return ptp_chdk_exec_lua("shut_down(1);",params,deviceinfo);
+  return ptp_chdk_exec_lua("shut_down(1);",0,params,deviceinfo);
 }
 
 int ptp_chdk_shutdown_soft(PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  return ptp_chdk_exec_lua("shut_down(0);",params,deviceinfo);
+  return ptp_chdk_exec_lua("shut_down(0);",0,params,deviceinfo);
 }
 
 int ptp_chdk_reboot(PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
-  return ptp_chdk_exec_lua("reboot();",params,deviceinfo);
+  return ptp_chdk_exec_lua("reboot();",0,params,deviceinfo);
 }
 
 int ptp_chdk_reboot_fw_update(char *path, PTPParams* params, PTPDeviceInfo* deviceinfo)
@@ -1726,7 +1726,7 @@ int ptp_chdk_reboot_fw_update(char *path, PTPParams* params, PTPDeviceInfo* devi
   }
 
   sprintf(s,"reboot(\"%s\");",path);
-  ret = ptp_chdk_exec_lua(s,params,deviceinfo);
+  ret = ptp_chdk_exec_lua(s,0,params,deviceinfo);
 
   free(s);
 
@@ -1863,8 +1863,9 @@ int ptp_chdk_download(char *remote_fn, char *local_fn, PTPParams* params, PTPDev
 
   PTP_CNT_INIT(ptp);
   ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=1;
+  ptp.Nparam=2;
   ptp.Param1=PTP_CHDK_TempData;
+  ptp.Param2=0;
   ret=ptp_transaction(params, &ptp, PTP_DP_SENDDATA, strlen(remote_fn), &remote_fn);
   if ( ret != 0x2001 )
   {
@@ -1912,25 +1913,89 @@ int ptp_chdk_switch_mode(int mode, PTPParams* params, PTPDeviceInfo* deviceinfo)
   }
 
   sprintf(s,"switch_mode(%i);",mode);
-  return ptp_chdk_exec_lua(s,params,deviceinfo);
+  return ptp_chdk_exec_lua(s,0,params,deviceinfo);
 }
 
-int ptp_chdk_exec_lua(char *script, PTPParams* params, PTPDeviceInfo* deviceinfo)
+int ptp_chdk_exec_lua(char *script, int get_result, PTPParams* params, PTPDeviceInfo* deviceinfo)
 {
   uint16_t r;
   PTPContainer ptp;
 
   PTP_CNT_INIT(ptp);
   ptp.Code=PTP_OC_CHDK;
-  ptp.Nparam=2;
+  ptp.Nparam=3;
   ptp.Param1=PTP_CHDK_ExecuteScript;
   ptp.Param2=PTP_CHDK_SL_LUA;
+  ptp.Param3=0;
+
+  if ( get_result )
+  {
+    char *buf = (char *) malloc(7+strlen(script)+1);
+    sprintf(buf,"return %s",script);
+    script = buf;
+    
+    ptp.Param3 |= PTP_CHDK_ES_WAIT | PTP_CHDK_ES_RESULT;
+  }
+
   r=ptp_transaction(params, &ptp, PTP_DP_SENDDATA, strlen(script)+1, &script);
+  if ( get_result )
+  {
+    free(script);
+  }
   if ( r != 0x2001 )
   {
     ptp_error(params,"unexpected return code 0x%x",r);
     return 0;
   }
+
+  if ( get_result )
+  {
+    switch ( ptp.Param1 )
+    {
+      case PTP_CHDK_TYPE_NOTHING:
+        break;
+
+      case PTP_CHDK_TYPE_NIL:
+        printf("nil\n");
+        break;
+
+      case PTP_CHDK_TYPE_BOOLEAN:
+        if ( ptp.Param2 )
+          printf("true\n");
+        else
+          printf("false\n");
+        break;
+
+      case PTP_CHDK_TYPE_INTEGER:
+        printf("%i (%x)\n",ptp.Param2,ptp.Param2);
+        break;
+
+      case PTP_CHDK_TYPE_STRING:
+        {
+          char *s = (char *) malloc(ptp.Param2+1);
+          s[ptp.Param2] = 0;
+
+          ptp.Code=PTP_OC_CHDK;
+          ptp.Nparam=2;
+          ptp.Param1=PTP_CHDK_TempData;
+          ptp.Param2=PTP_CHDK_TD_DOWNLOAD|PTP_CHDK_TD_CLEAR;
+          r=ptp_transaction(params, &ptp, PTP_DP_GETDATA, 0, &s);
+          if ( r != 0x2001 )
+          {
+            ptp_error(params,"unexpected return code 0x%x while retrieving result",r);
+            return 0;
+          }
+
+          printf("%s\n",s);
+          break;
+        }
+
+      default:
+        ptp_error(params,"return value has unsupported type");
+        break;
+    }
+  }
+
   return 1;
 }
 
