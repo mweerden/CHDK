@@ -120,6 +120,7 @@ static int handle_ptp(
         break;
       }
 
+      data->get_data_size(data->handle); // XXX required call before receiving
       if ( !recv_ptp_data(data,(char *) param2,param3) )
       {
         ptp.code = PTP_RC_GeneralError;
